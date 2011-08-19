@@ -1,0 +1,350 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Words, code, skates: node.js &amp; Mongo</title>
+  <meta name="author" content="Matthew Denner">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+
+  <link rel="canonical" href="http://mattdenner.github.com//blog/2011/08/19/node-js-and-mongo/"/>
+  <link href="/favicon.png" rel="shortcut icon" />
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="http://s3.amazonaws.com/ender-js/jeesh.min.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  
+  <link href="/atom.xml" rel="alternate" title="Words, code, skates" type="application/atom+xml"/>
+  
+
+  
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+  <!--Fonts from Google's Web font directory at http://google.com/webfonts -->
+<link href='http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic' rel='stylesheet' type='text/css'>
+
+</head>
+
+<body  >
+  <header><hgroup>
+  <h1><a href="/">Words, code, skates</a></h1>
+  
+    <h2>A blog of a inline skating software engineer</h2>
+  
+</hgroup>
+
+</header>
+  <nav role=navigation><ul role=subscription data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+<form action="http://google.com/search" method="get">
+  <fieldset role="site-search">
+    <input type="hidden" name="q" value="site:mattdenner.github.com/" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+<ul role=main-navigation>
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry">
+  
+  <header>
+    
+      <h1 class="entry-title">node.js &amp; Mongo</h1>
+    
+    
+      <p class="meta">
+
+
+
+
+<time datetime="2011-08-19 14:57:00 +0100" pubdate  updated >Aug 19<span>th</span>, 2011</time>
+
+
+</p>
+    
+  </header>
+
+
+<div class="entry-content"><p>I&#8217;ve been wanting to try <a href="http://nodejs.org/">node.js</a> for a while and,
+given <a href="http://whyday.org/">today was Whyday</a>, I thought I&#8217;d give it,
+and <a href="http://mongodb.org/">MongoDB</a>, a go.  Turns out it hasn&#8217;t been the most
+pleasant experience I&#8217;ve had.</p>
+
+<p><strong>TR;DR</strong>: MongoDB just worked; asynchronous code looks crap; callbacks
+should be objects, not functions; and documentation could be better.</p>
+
+<!--more-->
+
+
+<p>Installing node.js and MongoDB on Mac OS X is simple if you&#8217;re using
+<a href="http://bit.ly/qVJZ9S">homebrew</a>, and getting a project and it&#8217;s
+dependencies setup with <a href="http://npmjs.org/">npm</a> is relatively
+straight forward.</p>
+
+<p>It&#8217;s important to note that the problems I&#8217;m about to list are only
+after a few hours of playing (and with constant interruptions from work
+colleagues that I wanted to try to avoid), so they are only about getting
+started with node.js and MongoDB.  All of these opinions might be proven
+wrong over time, but they made my experience less gratifying.</p>
+
+<p>Also, note that <strong>none</strong> of them related to MongoDB.  It just worked.
+Admittedly I haven&#8217;t pushed it yet, but it was very easy to start
+working with it.</p>
+
+<p>My main problems have been:</p>
+
+<h2>Asynchronous code looks like crap</h2>
+
+<p>I&#8217;m sorry, but one important factor in my code writing is it looking
+nice.  It sounds stupid to say this is important but well laid out code
+is easier to read, which makes it easier to understand, IMO.</p>
+
+<p>The problem is that asynchronous code looks fugly, very quickly.  Take a
+simple example: open a connection to MongoDB, save a document, close the
+connection.  Synchronous code could align these but asynchronous
+automatically requires indentation:</p>
+
+<div><figure role=code><figcaption><span>asychronous-pseudo.js </span></figcaption>
+ <div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+<span class='line'>9</span>
+<span class='line'>10</span>
+<span class='line'>11</span>
+</pre></td><td class='code' width='100%'><pre><code class='js'><div class='line'><span class="nx">driver</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="s1">&#39;db&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+</div><div class='line'>  <span class="k">if</span> <span class="p">(</span><span class="nx">err</span> <span class="o">==</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+</div><div class='line'>    <span class="nx">record</span><span class="p">.</span><span class="nx">save</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+</div><div class='line'>      <span class="k">if</span> <span class="p">(</span><span class="nx">err</span> <span class="o">==</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+</div><div class='line'>        <span class="nx">driver</span><span class="p">.</span><span class="nx">close</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+</div><div class='line'>          <span class="c1">// This is 5 levels deep!</span>
+</div><div class='line'>        <span class="p">});</span>
+</div><div class='line'>      <span class="p">}</span>
+</div><div class='line'>    <span class="p">});</span>
+</div><div class='line'>  <span class="p">}</span>
+</div><div class='line'><span class="p">});</span>
+</div></code></pre></td></tr></table></div></figure></div>
+
+
+<p>5 levels of indentation!</p>
+
+<p>I know you can use functions, instead of the anonymous functions I&#8217;ve
+used in the code above, but that&#8217;s something you learn over time, not
+something I&#8217;ve seen being taught (or explained) from the start.  I guess
+that&#8217;s part of the problem I have: that it&#8217;s incredibly hard to find any
+form of best practices or style guide on code layout in node.js.  It&#8217;s
+something I would expect to find on the node.js website itself, like a
+style guide for keeping you from having to scroll your editor sideways
+to read an entire line.</p>
+
+<h2>Callbacks</h2>
+
+<p>node.js has the philosophy that your callback will be a function, the
+first argument of which could be an error.  Your callbacks then end up
+with conditional logic in them based on the presence of this parameter,
+which, to me, completely violates object oriented programming.  Rather
+than writing:</p>
+
+<div><figure role=code><figcaption><span>node-callbacks.js </span></figcaption>
+ <div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+</pre></td><td class='code' width='100%'><pre><code class='js'><div class='line'><span class="nx">my_asynchronous_thing</span><span class="p">.</span><span class="nx">some_method</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+</div><div class='line'>  <span class="k">if</span> <span class="p">(</span><span class="nx">err</span> <span class="o">!=</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+</div><div class='line'>    <span class="c1">// Do something on error</span>
+</div><div class='line'>  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</div><div class='line'>    <span class="c1">// Do something on success</span>
+</div><div class='line'>  <span class="p">}</span>
+</div><div class='line'><span class="p">});</span>
+</div></code></pre></td></tr></table></div></figure></div>
+
+
+<p>I would much rather see the callback as an object with <code>error</code> and
+<code>success</code> functions:</p>
+
+<div><figure role=code><figcaption><span>object-callbacks.js </span></figcaption>
+ <div class="highlight"><table cellpadding="0" cellspacing="0"><tr><td class="gutter"><pre class="line-numbers"><span class='line'>1</span>
+<span class='line'>2</span>
+<span class='line'>3</span>
+<span class='line'>4</span>
+<span class='line'>5</span>
+<span class='line'>6</span>
+<span class='line'>7</span>
+<span class='line'>8</span>
+</pre></td><td class='code' width='100%'><pre><code class='js'><div class='line'><span class="nx">my_asynchronous_thing</span><span class="p">.</span><span class="nx">some_method</span><span class="p">({</span>
+</div><div class='line'>  <span class="nx">error</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error_object</span><span class="p">)</span> <span class="p">{</span>
+</div><div class='line'>    <span class="c1">// Do something on error</span>
+</div><div class='line'>  <span class="p">},</span>
+</div><div class='line'>  <span class="nx">success</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</div><div class='line'>    <span class="c1">// Do something on success</span>
+</div><div class='line'>  <span class="p">}</span>
+</div><div class='line'><span class="p">});</span>
+</div></code></pre></td></tr></table></div></figure></div>
+
+
+<p>It seems odd, to me, that something built in a properly object oriented
+language wouldn&#8217;t take advantage of this.  I felt like I was back
+writing C code!  Maybe I&#8217;m missing something?</p>
+
+<h2>Documentation</h2>
+
+<p>I picked <a href="http://mongoosejs.com/">Mongoose</a> as my interface to MongoDB
+from node.js because it looked like it would offer a reasonable amount
+of extras.  Coming from the <a href="htp://rubyonrails.org/">Rails</a> world I like
+the idea of being able to specify validations on my database models, and
+this is something that Mongoose provides.</p>
+
+<p>My main problem with this module is that the documentation is lacking.
+Yes, it <em>has</em> documentation, and lots of it by the looks of things.  The
+problem is that it&#8217;s contradictory: at one point it says you can
+validate strings with regular expressions using <code>validate</code>, then it&#8217;s
+<code>match</code>.</p>
+
+<p>Given that mismatch I started to lose trust in what I was writing, when
+the validations weren&#8217;t being run, and faith in the documentation
+itself.  So I dug around the code to find what I needed, but that isn&#8217;t
+something I should have to do, or was very successful doing.</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Matthew Denner</span></span>
+
+      
+
+
+
+
+<time datetime="2011-08-19 14:57:00 +0100" pubdate  updated >Aug 19<span>th</span>, 2011</time>
+
+
+
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/NoSQL/'>NoSQL</a>, <a class='category' href='/blog/categories/Node/'>Node</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://mattdenner.github.com//blog/2011/08/19/node-js-and-mongo/" data-via="mattdenner" data-counturl="http://mattdenner.github.com//blog/2011/08/19/node-js-and-mongo/" >Tweet</a>
+  
+  
+  <g:plusone size="medium"></g:plusone>
+  
+</div>
+
+    
+  </footer>
+</article>
+
+</div>
+
+<aside role=sidebar>
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2011/08/19/things-ive-learned-this-week/">Things I&#8217;ve Learned This Week</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/08/19/node-js-and-mongo/">node.js &amp; Mongo</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2011/08/11/36-years-down/">36 Years Down</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("mattdenner", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/mattdenner" class="twitter-follow-button" data-width="208px" data-show-count="false">Follow @mattdenner</a>
+  
+</section>
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer><p>
+  Copyright &copy; 2011 - Matthew Denner -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+</body>
+</html>

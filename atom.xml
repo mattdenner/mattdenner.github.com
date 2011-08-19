@@ -4,13 +4,188 @@
   <title>Words, code, skates</title>
   <link href="http://mattdenner.github.com//atom.xml" rel="self"/>
   <link href="http://mattdenner.github.com//"/>
-  <updated>2011-08-11T19:56:00+01:00</updated>
+  <updated>2011-08-19T20:55:33+01:00</updated>
   <id>http://mattdenner.github.com//</id>
   <author>
     <name>Matthew Denner</name>
     
   </author>
 
+  
+  <entry>
+    <title>Things I've Learned This Week</title>
+    <link href="http://mattdenner.github.com//blog/2011/08/19/things-ive-learned-this-week/"/>
+    <updated>2011-08-19T20:34:00+01:00</updated>
+    <id>http://mattdenner.github.com//blog/2011/08/19/things-ive-learned-this-week</id>
+    <content type="html">&lt;p&gt;I thought it might be fun to keep track of things I've learned every
+week:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Ask &quot;Where is the data?&quot; not &quot;Do we have the data?&quot;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://bit.ly/qADEUv&quot;&gt;Dr Who is ideal for graph databases&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;People will bitch about the performance of Ruby just to get a rise out of you&lt;/li&gt;
+&lt;li&gt;There is absolutely no way on Earth I'd ever watch Twilight (I won't even link to it)&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://chzb.gr/nIH6GW&quot;&gt;Mandarin Chinese comes from techies&lt;/a&gt; (and DBAs have far too much time on their hands)&lt;/li&gt;
+&lt;li&gt;It's important to take time to play&lt;/li&gt;
+&lt;/ul&gt;
+
+</content>
+  </entry>
+  
+  <entry>
+    <title>node.js &amp; Mongo</title>
+    <link href="http://mattdenner.github.com//blog/2011/08/19/node-js-and-mongo/"/>
+    <updated>2011-08-19T14:57:00+01:00</updated>
+    <id>http://mattdenner.github.com//blog/2011/08/19/node-js-and-mongo</id>
+    <content type="html">&lt;p&gt;I've been wanting to try &lt;a href=&quot;http://nodejs.org/&quot;&gt;node.js&lt;/a&gt; for a while and,
+given &lt;a href=&quot;http://whyday.org/&quot;&gt;today was Whyday&lt;/a&gt;, I thought I'd give it,
+and &lt;a href=&quot;http://mongodb.org/&quot;&gt;MongoDB&lt;/a&gt;, a go.  Turns out it hasn't been the most
+pleasant experience I've had.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;TR;DR&lt;/strong&gt;: MongoDB just worked; asynchronous code looks crap; callbacks
+should be objects, not functions; and documentation could be better.&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+
+&lt;p&gt;Installing node.js and MongoDB on Mac OS X is simple if you're using
+&lt;a href=&quot;http://bit.ly/qVJZ9S&quot;&gt;homebrew&lt;/a&gt;, and getting a project and it's
+dependencies setup with &lt;a href=&quot;http://npmjs.org/&quot;&gt;npm&lt;/a&gt; is relatively
+straight forward.&lt;/p&gt;
+
+&lt;p&gt;It's important to note that the problems I'm about to list are only
+after a few hours of playing (and with constant interruptions from work
+colleagues that I wanted to try to avoid), so they are only about getting
+started with node.js and MongoDB.  All of these opinions might be proven
+wrong over time, but they made my experience less gratifying.&lt;/p&gt;
+
+&lt;p&gt;Also, note that &lt;strong&gt;none&lt;/strong&gt; of them related to MongoDB.  It just worked.
+Admittedly I haven't pushed it yet, but it was very easy to start
+working with it.&lt;/p&gt;
+
+&lt;p&gt;My main problems have been:&lt;/p&gt;
+
+&lt;h2&gt;Asynchronous code looks like crap&lt;/h2&gt;
+
+&lt;p&gt;I'm sorry, but one important factor in my code writing is it looking
+nice.  It sounds stupid to say this is important but well laid out code
+is easier to read, which makes it easier to understand, IMO.&lt;/p&gt;
+
+&lt;p&gt;The problem is that asynchronous code looks fugly, very quickly.  Take a
+simple example: open a connection to MongoDB, save a document, close the
+connection.  Synchronous code could align these but asynchronous
+automatically requires indentation:&lt;/p&gt;
+
+&lt;div&gt;&lt;figure role=code&gt;&lt;figcaption&gt;&lt;span&gt;asychronous-pseudo.js &lt;/span&gt;&lt;/figcaption&gt;
+ &lt;div class=&quot;highlight&quot;&gt;&lt;table cellpadding=&quot;0&quot; cellspacing=&quot;0&quot;&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class='line'&gt;1&lt;/span&gt;
+&lt;span class='line'&gt;2&lt;/span&gt;
+&lt;span class='line'&gt;3&lt;/span&gt;
+&lt;span class='line'&gt;4&lt;/span&gt;
+&lt;span class='line'&gt;5&lt;/span&gt;
+&lt;span class='line'&gt;6&lt;/span&gt;
+&lt;span class='line'&gt;7&lt;/span&gt;
+&lt;span class='line'&gt;8&lt;/span&gt;
+&lt;span class='line'&gt;9&lt;/span&gt;
+&lt;span class='line'&gt;10&lt;/span&gt;
+&lt;span class='line'&gt;11&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class='code' width='100%'&gt;&lt;pre&gt;&lt;code class='js'&gt;&lt;div class='line'&gt;&lt;span class=&quot;nx&quot;&gt;driver&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;open&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;db&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;err&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;/div&gt;&lt;div class='line'&gt;  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;/div&gt;&lt;div class='line'&gt;    &lt;span class=&quot;nx&quot;&gt;record&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;save&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;err&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;/div&gt;&lt;div class='line'&gt;      &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;/div&gt;&lt;div class='line'&gt;        &lt;span class=&quot;nx&quot;&gt;driver&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;close&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;err&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;/div&gt;&lt;div class='line'&gt;          &lt;span class=&quot;c1&quot;&gt;// This is 5 levels deep!&lt;/span&gt;
+&lt;/div&gt;&lt;div class='line'&gt;        &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;/div&gt;&lt;div class='line'&gt;      &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/div&gt;&lt;div class='line'&gt;    &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;/div&gt;&lt;div class='line'&gt;  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/div&gt;&lt;div class='line'&gt;&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;/div&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/div&gt;
+
+
+&lt;p&gt;5 levels of indentation!&lt;/p&gt;
+
+&lt;p&gt;I know you can use functions, instead of the anonymous functions I've
+used in the code above, but that's something you learn over time, not
+something I've seen being taught (or explained) from the start.  I guess
+that's part of the problem I have: that it's incredibly hard to find any
+form of best practices or style guide on code layout in node.js.  It's
+something I would expect to find on the node.js website itself, like a
+style guide for keeping you from having to scroll your editor sideways
+to read an entire line.&lt;/p&gt;
+
+&lt;h2&gt;Callbacks&lt;/h2&gt;
+
+&lt;p&gt;node.js has the philosophy that your callback will be a function, the
+first argument of which could be an error.  Your callbacks then end up
+with conditional logic in them based on the presence of this parameter,
+which, to me, completely violates object oriented programming.  Rather
+than writing:&lt;/p&gt;
+
+&lt;div&gt;&lt;figure role=code&gt;&lt;figcaption&gt;&lt;span&gt;node-callbacks.js &lt;/span&gt;&lt;/figcaption&gt;
+ &lt;div class=&quot;highlight&quot;&gt;&lt;table cellpadding=&quot;0&quot; cellspacing=&quot;0&quot;&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class='line'&gt;1&lt;/span&gt;
+&lt;span class='line'&gt;2&lt;/span&gt;
+&lt;span class='line'&gt;3&lt;/span&gt;
+&lt;span class='line'&gt;4&lt;/span&gt;
+&lt;span class='line'&gt;5&lt;/span&gt;
+&lt;span class='line'&gt;6&lt;/span&gt;
+&lt;span class='line'&gt;7&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class='code' width='100%'&gt;&lt;pre&gt;&lt;code class='js'&gt;&lt;div class='line'&gt;&lt;span class=&quot;nx&quot;&gt;my_asynchronous_thing&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;some_method&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;err&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;/div&gt;&lt;div class='line'&gt;  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;/div&gt;&lt;div class='line'&gt;    &lt;span class=&quot;c1&quot;&gt;// Do something on error&lt;/span&gt;
+&lt;/div&gt;&lt;div class='line'&gt;  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;/div&gt;&lt;div class='line'&gt;    &lt;span class=&quot;c1&quot;&gt;// Do something on success&lt;/span&gt;
+&lt;/div&gt;&lt;div class='line'&gt;  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/div&gt;&lt;div class='line'&gt;&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;/div&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/div&gt;
+
+
+&lt;p&gt;I would much rather see the callback as an object with &lt;code&gt;error&lt;/code&gt; and
+&lt;code&gt;success&lt;/code&gt; functions:&lt;/p&gt;
+
+&lt;div&gt;&lt;figure role=code&gt;&lt;figcaption&gt;&lt;span&gt;object-callbacks.js &lt;/span&gt;&lt;/figcaption&gt;
+ &lt;div class=&quot;highlight&quot;&gt;&lt;table cellpadding=&quot;0&quot; cellspacing=&quot;0&quot;&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class='line'&gt;1&lt;/span&gt;
+&lt;span class='line'&gt;2&lt;/span&gt;
+&lt;span class='line'&gt;3&lt;/span&gt;
+&lt;span class='line'&gt;4&lt;/span&gt;
+&lt;span class='line'&gt;5&lt;/span&gt;
+&lt;span class='line'&gt;6&lt;/span&gt;
+&lt;span class='line'&gt;7&lt;/span&gt;
+&lt;span class='line'&gt;8&lt;/span&gt;
+&lt;/pre&gt;&lt;/td&gt;&lt;td class='code' width='100%'&gt;&lt;pre&gt;&lt;code class='js'&gt;&lt;div class='line'&gt;&lt;span class=&quot;nx&quot;&gt;my_asynchronous_thing&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;some_method&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt;
+&lt;/div&gt;&lt;div class='line'&gt;  &lt;span class=&quot;nx&quot;&gt;error&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;error_object&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;/div&gt;&lt;div class='line'&gt;    &lt;span class=&quot;c1&quot;&gt;// Do something on error&lt;/span&gt;
+&lt;/div&gt;&lt;div class='line'&gt;  &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
+&lt;/div&gt;&lt;div class='line'&gt;  &lt;span class=&quot;nx&quot;&gt;success&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;/div&gt;&lt;div class='line'&gt;    &lt;span class=&quot;c1&quot;&gt;// Do something on success&lt;/span&gt;
+&lt;/div&gt;&lt;div class='line'&gt;  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/div&gt;&lt;div class='line'&gt;&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;/div&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/div&gt;
+
+
+&lt;p&gt;It seems odd, to me, that something built in a properly object oriented
+language wouldn't take advantage of this.  I felt like I was back
+writing C code!  Maybe I'm missing something?&lt;/p&gt;
+
+&lt;h2&gt;Documentation&lt;/h2&gt;
+
+&lt;p&gt;I picked &lt;a href=&quot;http://mongoosejs.com/&quot;&gt;Mongoose&lt;/a&gt; as my interface to MongoDB
+from node.js because it looked like it would offer a reasonable amount
+of extras.  Coming from the &lt;a href=&quot;htp://rubyonrails.org/&quot;&gt;Rails&lt;/a&gt; world I like
+the idea of being able to specify validations on my database models, and
+this is something that Mongoose provides.&lt;/p&gt;
+
+&lt;p&gt;My main problem with this module is that the documentation is lacking.
+Yes, it &lt;em&gt;has&lt;/em&gt; documentation, and lots of it by the looks of things.  The
+problem is that it's contradictory: at one point it says you can
+validate strings with regular expressions using &lt;code&gt;validate&lt;/code&gt;, then it's
+&lt;code&gt;match&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Given that mismatch I started to lose trust in what I was writing, when
+the validations weren't being run, and faith in the documentation
+itself.  So I dug around the code to find what I needed, but that isn't
+something I should have to do, or was very successful doing.&lt;/p&gt;
+</content>
+  </entry>
   
   <entry>
     <title>36 Years Down</title>
