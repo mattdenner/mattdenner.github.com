@@ -4,13 +4,31 @@
   <title>Words, code, skates</title>
   <link href="http://mattdenner.github.com//atom.xml" rel="self"/>
   <link href="http://mattdenner.github.com//"/>
-  <updated>2011-08-29T17:03:00+01:00</updated>
+  <updated>2011-09-04T15:20:54+01:00</updated>
   <id>http://mattdenner.github.com//</id>
   <author>
     <name>Matthew Denner</name>
     
   </author>
 
+  
+  <entry>
+    <title>Things I've Learned This Week</title>
+    <link href="http://mattdenner.github.com//blog/2011/09/04/things-ive-learned-this-week/"/>
+    <updated>2011-09-04T15:00:00+01:00</updated>
+    <id>http://mattdenner.github.com//blog/2011/09/04/things-ive-learned-this-week</id>
+    <content type="html">&lt;p&gt;What I've learned this week:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Ignoring rumours about your future is hard&lt;/li&gt;
+&lt;li&gt;I suck at chess&lt;/li&gt;
+&lt;li&gt;Apple Keynote is way better than Microsoft PowerPoint&lt;/li&gt;
+&lt;li&gt;&lt;a href=&quot;http://neo4j.org/&quot;&gt;Neo4j&lt;/a&gt; is pretty cool&lt;/li&gt;
+&lt;li&gt;I appear to have missed about 2 seasons of &lt;a href=&quot;http://www.imdb.com/title/tt0187636/&quot;&gt;Farscape&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+</content>
+  </entry>
   
   <entry>
     <title>Things I've Learned This Week</title>
