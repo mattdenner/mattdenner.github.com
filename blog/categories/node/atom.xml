@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Node | Words, code, skates]]></title>
+  <link href="http://mattdenner.github.com//blog/categories/node/atom.xml" rel="self"/>
+  <link href="http://mattdenner.github.com//"/>
+  <updated>2011-11-22T19:15:04+00:00</updated>
+  <id>http://mattdenner.github.com//</id>
+  <author>
+    <name><![CDATA[Matthew Denner]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[node.js &amp; Mongo]]></title>
+    <link href="http://mattdenner.github.com//blog/2011/08/19/node-js-and-mongo/"/>
+    <updated>2011-08-19T14:57:00+01:00</updated>
+    <id>http://mattdenner.github.com//blog/2011/08/19/node-js-and-mongo</id>
+    <content type="html"><![CDATA[<p>I've been wanting to try <a href="http://nodejs.org/">node.js</a> for a while and,
+given <a href="http://whyday.org/">today was Whyday</a>, I thought I'd give it,
+and <a href="http://mongodb.org/">MongoDB</a>, a go.  Turns out it hasn't been the most
+pleasant experience I've had.</p>
+
+<p><strong>TR;DR</strong>: MongoDB just worked; asynchronous code looks crap; callbacks
+should be objects, not functions; and documentation could be better.</p>
+
+<!--more-->
+
+
+<p>Installing node.js and MongoDB on Mac OS X is simple if you're using
+<a href="http://bit.ly/qVJZ9S">homebrew</a>, and getting a project and it's
+dependencies setup with <a href="http://npmjs.org/">npm</a> is relatively
+straight forward.</p>
+
+<p>It's important to note that the problems I'm about to list are only
+after a few hours of playing (and with constant interruptions from work
+colleagues that I wanted to try to avoid), so they are only about getting
+started with node.js and MongoDB.  All of these opinions might be proven
+wrong over time, but they made my experience less gratifying.</p>
+
+<p>Also, note that <strong>none</strong> of them related to MongoDB.  It just worked.
+Admittedly I haven't pushed it yet, but it was very easy to start
+working with it.</p>
+
+<p>My main problems have been:</p>
+
+<h2>Asynchronous code looks like crap</h2>
+
+<p>I'm sorry, but one important factor in my code writing is it looking
+nice.  It sounds stupid to say this is important but well laid out code
+is easier to read, which makes it easier to understand, IMO.</p>
+
+<p>The problem is that asynchronous code looks fugly, very quickly.  Take a
+simple example: open a connection to MongoDB, save a document, close the
+connection.  Synchronous code could align these but asynchronous
+automatically requires indentation:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>asychronous-pseudo.js </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">driver</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="s1">&#39;db&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="nx">err</span> <span class="o">==</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="nx">record</span><span class="p">.</span><span class="nx">save</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="nx">err</span> <span class="o">==</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">driver</span><span class="p">.</span><span class="nx">close</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="c1">// This is 5 levels deep!</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>  <span class="p">}</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>5 levels of indentation!</p>
+
+<p>I know you can use functions, instead of the anonymous functions I've
+used in the code above, but that's something you learn over time, not
+something I've seen being taught (or explained) from the start.  I guess
+that's part of the problem I have: that it's incredibly hard to find any
+form of best practices or style guide on code layout in node.js.  It's
+something I would expect to find on the node.js website itself, like a
+style guide for keeping you from having to scroll your editor sideways
+to read an entire line.</p>
+
+<h2>Callbacks</h2>
+
+<p>node.js has the philosophy that your callback will be a function, the
+first argument of which could be an error.  Your callbacks then end up
+with conditional logic in them based on the presence of this parameter,
+which, to me, completely violates object oriented programming.  Rather
+than writing:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>node-callbacks.js </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">my_asynchronous_thing</span><span class="p">.</span><span class="nx">some_method</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="nx">err</span> <span class="o">!=</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="c1">// Do something on error</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="c1">// Do something on success</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>  <span class="p">}</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>I would much rather see the callback as an object with <code>error</code> and
+<code>success</code> functions:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>object-callbacks.js </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">my_asynchronous_thing</span><span class="p">.</span><span class="nx">some_method</span><span class="p">({</span>
+</span><span class='line'>  <span class="nx">error</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error_object</span><span class="p">)</span> <span class="p">{</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="c1">// Do something on error</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>  <span class="p">},</span>
+</span><span class='line'>  <span class="nx">success</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span><span class="o">&lt;</span><span class="err">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">pre</span><span class="o">&gt;&lt;</span><span class="nx">code</span><span class="o">&gt;</span><span class="c1">// Do something on success</span>
+</span><span class='line'><span class="o">&lt;</span><span class="err">/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nx">p</span><span class="o">&gt;</span>  <span class="p">}</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>It seems odd, to me, that something built in a properly object oriented
+language wouldn't take advantage of this.  I felt like I was back
+writing C code!  Maybe I'm missing something?</p>
+
+<h2>Documentation</h2>
+
+<p>I picked <a href="http://mongoosejs.com/">Mongoose</a> as my interface to MongoDB
+from node.js because it looked like it would offer a reasonable amount
+of extras.  Coming from the <a href="htp://rubyonrails.org/">Rails</a> world I like
+the idea of being able to specify validations on my database models, and
+this is something that Mongoose provides.</p>
+
+<p>My main problem with this module is that the documentation is lacking.
+Yes, it <em>has</em> documentation, and lots of it by the looks of things.  The
+problem is that it's contradictory: at one point it says you can
+validate strings with regular expressions using <code>validate</code>, then it's
+<code>match</code>.</p>
+
+<p>Given that mismatch I started to lose trust in what I was writing, when
+the validations weren't being run, and faith in the documentation
+itself.  So I dug around the code to find what I needed, but that isn't
+something I should have to do, or was very successful doing.</p>
+]]></content>
+  </entry>
+  
+</feed>

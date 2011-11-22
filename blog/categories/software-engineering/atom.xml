@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Software engineering | Words, code, skates]]></title>
+  <link href="http://mattdenner.github.com//blog/categories/software-engineering/atom.xml" rel="self"/>
+  <link href="http://mattdenner.github.com//"/>
+  <updated>2011-11-22T19:15:04+00:00</updated>
+  <id>http://mattdenner.github.com//</id>
+  <author>
+    <name><![CDATA[Matthew Denner]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Disagreement #1]]></title>
+    <link href="http://mattdenner.github.com//blog/2011/11/22/disagreement--1/"/>
+    <updated>2011-11-22T18:19:00+00:00</updated>
+    <id>http://mattdenner.github.com//blog/2011/11/22/disagreement--1</id>
+    <content type="html"><![CDATA[<p>Work has been a little stressful over the last few months, which is a
+whole other blog post at some point, but during the course of this I've
+had several disagreements with people that I've not been able to argue a
+reason why either option is better.  I've had gut feelings but, without
+being able to rely on the trusted "gut", it's hard to convince people
+that your opinion is in any way as valid as theirs.</p>
+
+<p>I think the ability to see others view points is something important,
+especially in an environment such as software development, but when
+those individuals have strong views, or a stubborn attachment to them,
+then you appear weak them.  I personally don't think of myself as weak,
+in that respect, but it bothers me that I can't convince people to even
+consider my opinion in some cases, and that worries me that we, as a
+team, will over look something.</p>
+
+<!--more-->
+
+
+<p>Here's a case in point:</p>
+
+<p>There are, to me, two camps of people in the object oriented world:
+those that believe in a large forest of small trees, and those that want
+one big tree.</p>
+
+<p>In Ruby code, these two views look like this, in the typical scenario of
+describing vehicles:</p>
+
+<p><code>ruby
+class Vehicle ; end
+class Car &lt; Vehicle ; end
+class Bus &lt; Vehicle ; end
+class Lorry &lt; Vehicle ; end
+class Ferrari &lt; Car ; end
+class Delorian &lt; Car ; end
+class Scania &lt; Lorry ; end
+</code></p>
+
+<p>And so on (please don't point out that the names I've used are really
+instances of a Manufacturer class, that's not what I'm trying to show
+here).  This is a big tree: everything is in one long hierarchy of
+classes because, on some level, they all fit into that tree.</p>
+
+<p>The other alternative is the large forest:</p>
+
+<p>``` ruby
+module Car ; end
+module Bus ; end
+module Lorry ; end</p>
+
+<p>class Ferrari ; include Car ; end
+class Delorian ; include Car ; end
+class Scania ; include Lorry ; end
+```</p>
+
+<p>The idea being that anything that includes Car shares that common car
+behaviour (maybe the number of wheels are 4, maybe the license you need
+to drive it is non-specific); as do those including Lorry.</p>
+
+<p>What the latter say is that you cannot substitute an instance of Scania
+for an instance of Ferrari: who would want to race a Scania lorry in an
+F1 competition?  Yes, I know, in Ruby you can because you just require
+the object to respond to certain methods, but that's another argument I
+have with people about using the language, not imposing some static type
+view point on a dynamic language.</p>
+
+<p>The problem is that, when I argue the case for a large forest those
+people who believe in big trees put up a stronger, or more aggressive,
+viewpoint.  In my experience, having worked with some extremely good
+software engineers in varying languages, the better developers lean
+towards the large forest because they see hierarchies as somewhat
+brittle: the classic of adding Aeroplane to these two situations is
+easier in the latter but people still try to push and shove it into
+their single hierarchy, after all, a Vehicle has an engine, so does an
+Aeroplane.</p>
+
+<p>I've rarely come across good software engineers who blankly refuse to
+even consider one view when they have the opposite, and it angers me
+because I see both, I just prefer the latter in my gut.</p>
+]]></content>
+  </entry>
+  
+</feed>

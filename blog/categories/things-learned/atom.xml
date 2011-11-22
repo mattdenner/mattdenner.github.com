@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Things Learned | Words, code, skates]]></title>
+  <link href="http://mattdenner.github.com//blog/categories/things-learned/atom.xml" rel="self"/>
+  <link href="http://mattdenner.github.com//"/>
+  <updated>2011-11-22T19:15:04+00:00</updated>
+  <id>http://mattdenner.github.com//</id>
+  <author>
+    <name><![CDATA[Matthew Denner]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Things I've Learned This Week]]></title>
+    <link href="http://mattdenner.github.com//blog/2011/09/10/things-ive-learned-this-week/"/>
+    <updated>2011-09-10T18:00:00+01:00</updated>
+    <id>http://mattdenner.github.com//blog/2011/09/10/things-ive-learned-this-week</id>
+    <content type="html"><![CDATA[<p>What I've learned this week:</p>
+
+<ul>
+<li><a href="http://literatureandlatte.com/">Scrivener</a> is an absolutely awesome writing tool</li>
+<li>DevOps is all about small changes for big gains</li>
+<li>People will always assume it's <em>your</em> fault once they have lost faith</li>
+<li>Subaru Imprezza's are cheaper than I expected</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Things I've Learned This Week]]></title>
+    <link href="http://mattdenner.github.com//blog/2011/09/04/things-ive-learned-this-week/"/>
+    <updated>2011-09-04T15:00:00+01:00</updated>
+    <id>http://mattdenner.github.com//blog/2011/09/04/things-ive-learned-this-week</id>
+    <content type="html"><![CDATA[<p>What I've learned this week:</p>
+
+<ul>
+<li>Ignoring rumours about your future is hard</li>
+<li>I suck at chess</li>
+<li>Apple Keynote is way better than Microsoft PowerPoint</li>
+<li><a href="http://neo4j.org/">Neo4j</a> is pretty cool</li>
+<li>I appear to have missed about 2 seasons of <a href="http://www.imdb.com/title/tt0187636/">Farscape</a></li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Things I've Learned This Week]]></title>
+    <link href="http://mattdenner.github.com//blog/2011/08/26/things-ive-learned-this-week/"/>
+    <updated>2011-08-26T20:30:00+01:00</updated>
+    <id>http://mattdenner.github.com//blog/2011/08/26/things-ive-learned-this-week</id>
+    <content type="html"><![CDATA[<p>What I've learned this week:</p>
+
+<ul>
+<li><a href="http://vibram.com/">Vibram</a> make the weirdest shoes, but damn they're comfy!</li>
+<li>Javascript is far more powerful than I gave it credit for</li>
+<li>IT hasn't changed: it's still about the money</li>
+<li>If you can't laugh at life it's going to see a lot longer</li>
+<li><a href="http://www.youtube.com/watch?v=4rGVSBTAVHM">Ginger Tea</a>, with lemon, really helps with colds</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Things I've Learned This Week]]></title>
+    <link href="http://mattdenner.github.com//blog/2011/08/19/things-ive-learned-this-week/"/>
+    <updated>2011-08-19T20:34:00+01:00</updated>
+    <id>http://mattdenner.github.com//blog/2011/08/19/things-ive-learned-this-week</id>
+    <content type="html"><![CDATA[<p>I thought it might be fun to keep track of things I've learned every
+week:</p>
+
+<ul>
+<li>Ask "Where is the data?" not "Do we have the data?"</li>
+<li><a href="http://bit.ly/qADEUv">Dr Who is ideal for graph databases</a></li>
+<li>People will bitch about the performance of Ruby just to get a rise out of you</li>
+<li>There is absolutely no way on Earth I'd ever watch Twilight (I won't even link to it)</li>
+<li><a href="http://chzb.gr/nIH6GW">Mandarin Chinese comes from techies</a> (and DBAs have far too much time on their hands)</li>
+<li>It's important to take time to play</li>
+</ul>
+
+]]></content>
+  </entry>
+  
+</feed>

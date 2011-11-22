@@ -1,295 +1,396 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title>Words, code, skates</title>
+  <title><![CDATA[Words, code, skates]]></title>
   <link href="http://mattdenner.github.com//atom.xml" rel="self"/>
   <link href="http://mattdenner.github.com//"/>
-  <updated>2011-09-10T17:45:31+01:00</updated>
+  <updated>2011-11-22T19:15:04+00:00</updated>
   <id>http://mattdenner.github.com//</id>
   <author>
-    <name>Matthew Denner</name>
+    <name><![CDATA[Matthew Denner]]></name>
     
   </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
 
   
   <entry>
-    <title>Things I've Learned This Week</title>
+    <title type="html"><![CDATA[Disagreement #1]]></title>
+    <link href="http://mattdenner.github.com//blog/2011/11/22/disagreement--1/"/>
+    <updated>2011-11-22T18:19:00+00:00</updated>
+    <id>http://mattdenner.github.com//blog/2011/11/22/disagreement&#8211;1</id>
+    <content type="html"><![CDATA[<p>Work has been a little stressful over the last few months, which is a
+whole other blog post at some point, but during the course of this I&#8217;ve
+had several disagreements with people that I&#8217;ve not been able to argue a
+reason why either option is better.  I&#8217;ve had gut feelings but, without
+being able to rely on the trusted &#8220;gut&#8221;, it&#8217;s hard to convince people
+that your opinion is in any way as valid as theirs.</p>
+
+<p>I think the ability to see others view points is something important,
+especially in an environment such as software development, but when
+those individuals have strong views, or a stubborn attachment to them,
+then you appear weak them.  I personally don&#8217;t think of myself as weak,
+in that respect, but it bothers me that I can&#8217;t convince people to even
+consider my opinion in some cases, and that worries me that we, as a
+team, will over look something.</p>
+
+<!--more-->
+
+
+<p>Here&#8217;s a case in point:</p>
+
+<p>There are, to me, two camps of people in the object oriented world:
+those that believe in a large forest of small trees, and those that want
+one big tree.</p>
+
+<p>In Ruby code, these two views look like this, in the typical scenario of
+describing vehicles:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Vehicle</span> <span class="p">;</span> <span class="k">end</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">Car</span> <span class="o">&lt;</span> <span class="no">Vehicle</span> <span class="p">;</span> <span class="k">end</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">Bus</span> <span class="o">&lt;</span> <span class="no">Vehicle</span> <span class="p">;</span> <span class="k">end</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">Lorry</span> <span class="o">&lt;</span> <span class="no">Vehicle</span> <span class="p">;</span> <span class="k">end</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">Ferrari</span> <span class="o">&lt;</span> <span class="no">Car</span> <span class="p">;</span> <span class="k">end</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">Delorian</span> <span class="o">&lt;</span> <span class="no">Car</span> <span class="p">;</span> <span class="k">end</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">Scania</span> <span class="o">&lt;</span> <span class="no">Lorry</span> <span class="p">;</span> <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And so on (please don&#8217;t point out that the names I&#8217;ve used are really
+instances of a Manufacturer class, that&#8217;s not what I&#8217;m trying to show
+here).  This is a big tree: everything is in one long hierarchy of
+classes because, on some level, they all fit into that tree.</p>
+
+<p>The other alternative is the large forest:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">module</span> <span class="nn">Car</span> <span class="p">;</span> <span class="k">end</span>
+</span><span class='line'><span class="k">module</span> <span class="nn">Bus</span> <span class="p">;</span> <span class="k">end</span>
+</span><span class='line'><span class="k">module</span> <span class="nn">Lorry</span> <span class="p">;</span> <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">Ferrari</span> <span class="p">;</span> <span class="kp">include</span> <span class="no">Car</span> <span class="p">;</span> <span class="k">end</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">Delorian</span> <span class="p">;</span> <span class="kp">include</span> <span class="no">Car</span> <span class="p">;</span> <span class="k">end</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">Scania</span> <span class="p">;</span> <span class="kp">include</span> <span class="no">Lorry</span> <span class="p">;</span> <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The idea being that anything that includes Car shares that common car
+behaviour (maybe the number of wheels are 4, maybe the license you need
+to drive it is non-specific); as do those including Lorry.</p>
+
+<p>What the latter say is that you cannot substitute an instance of Scania
+for an instance of Ferrari: who would want to race a Scania lorry in an
+F1 competition?  Yes, I know, in Ruby you can because you just require
+the object to respond to certain methods, but that&#8217;s another argument I
+have with people about using the language, not imposing some static type
+view point on a dynamic language.</p>
+
+<p>The problem is that, when I argue the case for a large forest those
+people who believe in big trees put up a stronger, or more aggressive,
+viewpoint.  In my experience, having worked with some extremely good
+software engineers in varying languages, the better developers lean
+towards the large forest because they see hierarchies as somewhat
+brittle: the classic of adding Aeroplane to these two situations is
+easier in the latter but people still try to push and shove it into
+their single hierarchy, after all, a Vehicle has an engine, so does an
+Aeroplane.</p>
+
+<p>I&#8217;ve rarely come across good software engineers who blankly refuse to
+even consider one view when they have the opposite, and it angers me
+because I see both, I just prefer the latter in my gut.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Things I've Learned This Week]]></title>
     <link href="http://mattdenner.github.com//blog/2011/09/10/things-ive-learned-this-week/"/>
     <updated>2011-09-10T18:00:00+01:00</updated>
     <id>http://mattdenner.github.com//blog/2011/09/10/things-ive-learned-this-week</id>
-    <content type="html">&lt;p&gt;What I've learned this week:&lt;/p&gt;
+    <content type="html"><![CDATA[<p>What I&#8217;ve learned this week:</p>
 
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;http://literatureandlatte.com/&quot;&gt;Scrivener&lt;/a&gt; is an absolutely awesome writing tool&lt;/li&gt;
-&lt;li&gt;DevOps is all about small changes for big gains&lt;/li&gt;
-&lt;li&gt;People will always assume it's &lt;em&gt;your&lt;/em&gt; fault once they have lost faith&lt;/li&gt;
-&lt;li&gt;Subaru Imprezza's are cheaper than I expected&lt;/li&gt;
-&lt;/ul&gt;
+<ul>
+<li><a href="http://literatureandlatte.com/">Scrivener</a> is an absolutely awesome writing tool</li>
+<li>DevOps is all about small changes for big gains</li>
+<li>People will always assume it&#8217;s <em>your</em> fault once they have lost faith</li>
+<li>Subaru Imprezza&#8217;s are cheaper than I expected</li>
+</ul>
 
-</content>
+]]></content>
   </entry>
   
   <entry>
-    <title>Things I've Learned This Week</title>
+    <title type="html"><![CDATA[Things I've Learned This Week]]></title>
     <link href="http://mattdenner.github.com//blog/2011/09/04/things-ive-learned-this-week/"/>
     <updated>2011-09-04T15:00:00+01:00</updated>
     <id>http://mattdenner.github.com//blog/2011/09/04/things-ive-learned-this-week</id>
-    <content type="html">&lt;p&gt;What I've learned this week:&lt;/p&gt;
+    <content type="html"><![CDATA[<p>What I&#8217;ve learned this week:</p>
 
-&lt;ul&gt;
-&lt;li&gt;Ignoring rumours about your future is hard&lt;/li&gt;
-&lt;li&gt;I suck at chess&lt;/li&gt;
-&lt;li&gt;Apple Keynote is way better than Microsoft PowerPoint&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;http://neo4j.org/&quot;&gt;Neo4j&lt;/a&gt; is pretty cool&lt;/li&gt;
-&lt;li&gt;I appear to have missed about 2 seasons of &lt;a href=&quot;http://www.imdb.com/title/tt0187636/&quot;&gt;Farscape&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
+<ul>
+<li>Ignoring rumours about your future is hard</li>
+<li>I suck at chess</li>
+<li>Apple Keynote is way better than Microsoft PowerPoint</li>
+<li><a href="http://neo4j.org/">Neo4j</a> is pretty cool</li>
+<li>I appear to have missed about 2 seasons of <a href="http://www.imdb.com/title/tt0187636/">Farscape</a></li>
+</ul>
 
-</content>
+]]></content>
   </entry>
   
   <entry>
-    <title>Things I've Learned This Week</title>
+    <title type="html"><![CDATA[Things I've Learned This Week]]></title>
     <link href="http://mattdenner.github.com//blog/2011/08/26/things-ive-learned-this-week/"/>
     <updated>2011-08-26T20:30:00+01:00</updated>
     <id>http://mattdenner.github.com//blog/2011/08/26/things-ive-learned-this-week</id>
-    <content type="html">&lt;p&gt;What I've learned this week:&lt;/p&gt;
+    <content type="html"><![CDATA[<p>What I&#8217;ve learned this week:</p>
 
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&quot;http://vibram.com/&quot;&gt;Vibram&lt;/a&gt; make the weirdest shoes, but damn they're comfy!&lt;/li&gt;
-&lt;li&gt;Javascript is far more powerful than I gave it credit for&lt;/li&gt;
-&lt;li&gt;IT hasn't changed: it's still about the money&lt;/li&gt;
-&lt;li&gt;If you can't laugh at life it's going to see a lot longer&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;http://www.youtube.com/watch?v=4rGVSBTAVHM&quot;&gt;Ginger Tea&lt;/a&gt;, with lemon, really helps with colds&lt;/li&gt;
-&lt;/ul&gt;
+<ul>
+<li><a href="http://vibram.com/">Vibram</a> make the weirdest shoes, but damn they&#8217;re comfy!</li>
+<li>Javascript is far more powerful than I gave it credit for</li>
+<li>IT hasn&#8217;t changed: it&#8217;s still about the money</li>
+<li>If you can&#8217;t laugh at life it&#8217;s going to see a lot longer</li>
+<li><a href="http://www.youtube.com/watch?v=4rGVSBTAVHM">Ginger Tea</a>, with lemon, really helps with colds</li>
+</ul>
 
-</content>
+]]></content>
   </entry>
   
   <entry>
-    <title>Things I've Learned This Week</title>
+    <title type="html"><![CDATA[Things I've Learned This Week]]></title>
     <link href="http://mattdenner.github.com//blog/2011/08/19/things-ive-learned-this-week/"/>
     <updated>2011-08-19T20:34:00+01:00</updated>
     <id>http://mattdenner.github.com//blog/2011/08/19/things-ive-learned-this-week</id>
-    <content type="html">&lt;p&gt;I thought it might be fun to keep track of things I've learned every
-week:&lt;/p&gt;
+    <content type="html"><![CDATA[<p>I thought it might be fun to keep track of things I&#8217;ve learned every
+week:</p>
 
-&lt;ul&gt;
-&lt;li&gt;Ask &quot;Where is the data?&quot; not &quot;Do we have the data?&quot;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;http://bit.ly/qADEUv&quot;&gt;Dr Who is ideal for graph databases&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;People will bitch about the performance of Ruby just to get a rise out of you&lt;/li&gt;
-&lt;li&gt;There is absolutely no way on Earth I'd ever watch Twilight (I won't even link to it)&lt;/li&gt;
-&lt;li&gt;&lt;a href=&quot;http://chzb.gr/nIH6GW&quot;&gt;Mandarin Chinese comes from techies&lt;/a&gt; (and DBAs have far too much time on their hands)&lt;/li&gt;
-&lt;li&gt;It's important to take time to play&lt;/li&gt;
-&lt;/ul&gt;
+<ul>
+<li>Ask &#8220;Where is the data?&#8221; not &#8220;Do we have the data?&#8221;</li>
+<li><a href="http://bit.ly/qADEUv">Dr Who is ideal for graph databases</a></li>
+<li>People will bitch about the performance of Ruby just to get a rise out of you</li>
+<li>There is absolutely no way on Earth I&#8217;d ever watch Twilight (I won&#8217;t even link to it)</li>
+<li><a href="http://chzb.gr/nIH6GW">Mandarin Chinese comes from techies</a> (and DBAs have far too much time on their hands)</li>
+<li>It&#8217;s important to take time to play</li>
+</ul>
 
-</content>
+]]></content>
   </entry>
   
   <entry>
-    <title>node.js &amp; Mongo</title>
+    <title type="html"><![CDATA[node.js &amp; Mongo]]></title>
     <link href="http://mattdenner.github.com//blog/2011/08/19/node-js-and-mongo/"/>
     <updated>2011-08-19T14:57:00+01:00</updated>
     <id>http://mattdenner.github.com//blog/2011/08/19/node-js-and-mongo</id>
-    <content type="html">&lt;p&gt;I've been wanting to try &lt;a href=&quot;http://nodejs.org/&quot;&gt;node.js&lt;/a&gt; for a while and,
-given &lt;a href=&quot;http://whyday.org/&quot;&gt;today was Whyday&lt;/a&gt;, I thought I'd give it,
-and &lt;a href=&quot;http://mongodb.org/&quot;&gt;MongoDB&lt;/a&gt;, a go.  Turns out it hasn't been the most
-pleasant experience I've had.&lt;/p&gt;
+    <content type="html"><![CDATA[<p>I&#8217;ve been wanting to try <a href="http://nodejs.org/">node.js</a> for a while and,
+given <a href="http://whyday.org/">today was Whyday</a>, I thought I&#8217;d give it,
+and <a href="http://mongodb.org/">MongoDB</a>, a go.  Turns out it hasn&#8217;t been the most
+pleasant experience I&#8217;ve had.</p>
 
-&lt;p&gt;&lt;strong&gt;TR;DR&lt;/strong&gt;: MongoDB just worked; asynchronous code looks crap; callbacks
-should be objects, not functions; and documentation could be better.&lt;/p&gt;
+<p><strong>TR;DR</strong>: MongoDB just worked; asynchronous code looks crap; callbacks
+should be objects, not functions; and documentation could be better.</p>
 
-&lt;!--more--&gt;
+<!--more-->
 
 
-&lt;p&gt;Installing node.js and MongoDB on Mac OS X is simple if you're using
-&lt;a href=&quot;http://bit.ly/qVJZ9S&quot;&gt;homebrew&lt;/a&gt;, and getting a project and it's
-dependencies setup with &lt;a href=&quot;http://npmjs.org/&quot;&gt;npm&lt;/a&gt; is relatively
-straight forward.&lt;/p&gt;
+<p>Installing node.js and MongoDB on Mac OS X is simple if you&#8217;re using
+<a href="http://bit.ly/qVJZ9S">homebrew</a>, and getting a project and it&#8217;s
+dependencies setup with <a href="http://npmjs.org/">npm</a> is relatively
+straight forward.</p>
 
-&lt;p&gt;It's important to note that the problems I'm about to list are only
+<p>It&#8217;s important to note that the problems I&#8217;m about to list are only
 after a few hours of playing (and with constant interruptions from work
 colleagues that I wanted to try to avoid), so they are only about getting
 started with node.js and MongoDB.  All of these opinions might be proven
-wrong over time, but they made my experience less gratifying.&lt;/p&gt;
+wrong over time, but they made my experience less gratifying.</p>
 
-&lt;p&gt;Also, note that &lt;strong&gt;none&lt;/strong&gt; of them related to MongoDB.  It just worked.
-Admittedly I haven't pushed it yet, but it was very easy to start
-working with it.&lt;/p&gt;
+<p>Also, note that <strong>none</strong> of them related to MongoDB.  It just worked.
+Admittedly I haven&#8217;t pushed it yet, but it was very easy to start
+working with it.</p>
 
-&lt;p&gt;My main problems have been:&lt;/p&gt;
+<p>My main problems have been:</p>
 
-&lt;h2&gt;Asynchronous code looks like crap&lt;/h2&gt;
+<h2>Asynchronous code looks like crap</h2>
 
-&lt;p&gt;I'm sorry, but one important factor in my code writing is it looking
+<p>I&#8217;m sorry, but one important factor in my code writing is it looking
 nice.  It sounds stupid to say this is important but well laid out code
-is easier to read, which makes it easier to understand, IMO.&lt;/p&gt;
+is easier to read, which makes it easier to understand, IMO.</p>
 
-&lt;p&gt;The problem is that asynchronous code looks fugly, very quickly.  Take a
+<p>The problem is that asynchronous code looks fugly, very quickly.  Take a
 simple example: open a connection to MongoDB, save a document, close the
 connection.  Synchronous code could align these but asynchronous
-automatically requires indentation:&lt;/p&gt;
+automatically requires indentation:</p>
 
-&lt;div&gt;&lt;figure role=code&gt;&lt;figcaption&gt;&lt;span&gt;asychronous-pseudo.js &lt;/span&gt;&lt;/figcaption&gt;
- &lt;div class=&quot;highlight&quot;&gt;&lt;table cellpadding=&quot;0&quot; cellspacing=&quot;0&quot;&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class='line'&gt;1&lt;/span&gt;
-&lt;span class='line'&gt;2&lt;/span&gt;
-&lt;span class='line'&gt;3&lt;/span&gt;
-&lt;span class='line'&gt;4&lt;/span&gt;
-&lt;span class='line'&gt;5&lt;/span&gt;
-&lt;span class='line'&gt;6&lt;/span&gt;
-&lt;span class='line'&gt;7&lt;/span&gt;
-&lt;span class='line'&gt;8&lt;/span&gt;
-&lt;span class='line'&gt;9&lt;/span&gt;
-&lt;span class='line'&gt;10&lt;/span&gt;
-&lt;span class='line'&gt;11&lt;/span&gt;
-&lt;/pre&gt;&lt;/td&gt;&lt;td class='code' width='100%'&gt;&lt;pre&gt;&lt;code class='js'&gt;&lt;div class='line'&gt;&lt;span class=&quot;nx&quot;&gt;driver&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;open&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;db&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;err&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-&lt;/div&gt;&lt;div class='line'&gt;  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-&lt;/div&gt;&lt;div class='line'&gt;    &lt;span class=&quot;nx&quot;&gt;record&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;save&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;err&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-&lt;/div&gt;&lt;div class='line'&gt;      &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-&lt;/div&gt;&lt;div class='line'&gt;        &lt;span class=&quot;nx&quot;&gt;driver&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;close&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;err&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-&lt;/div&gt;&lt;div class='line'&gt;          &lt;span class=&quot;c1&quot;&gt;// This is 5 levels deep!&lt;/span&gt;
-&lt;/div&gt;&lt;div class='line'&gt;        &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
-&lt;/div&gt;&lt;div class='line'&gt;      &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/div&gt;&lt;div class='line'&gt;    &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
-&lt;/div&gt;&lt;div class='line'&gt;  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/div&gt;&lt;div class='line'&gt;&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
-&lt;/div&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/div&gt;
+<figure class='code'><figcaption><span>asychronous-pseudo.js </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">driver</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="s1">&#39;db&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="nx">err</span> <span class="o">==</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">record</span><span class="p">.</span><span class="nx">save</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="k">if</span> <span class="p">(</span><span class="nx">err</span> <span class="o">==</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>        <span class="nx">driver</span><span class="p">.</span><span class="nx">close</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>          <span class="c1">// This is 5 levels deep!</span>
+</span><span class='line'>        <span class="p">});</span>
+</span><span class='line'>      <span class="p">}</span>
+</span><span class='line'>    <span class="p">});</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-&lt;p&gt;5 levels of indentation!&lt;/p&gt;
+<p>5 levels of indentation!</p>
 
-&lt;p&gt;I know you can use functions, instead of the anonymous functions I've
-used in the code above, but that's something you learn over time, not
-something I've seen being taught (or explained) from the start.  I guess
-that's part of the problem I have: that it's incredibly hard to find any
-form of best practices or style guide on code layout in node.js.  It's
+<p>I know you can use functions, instead of the anonymous functions I&#8217;ve
+used in the code above, but that&#8217;s something you learn over time, not
+something I&#8217;ve seen being taught (or explained) from the start.  I guess
+that&#8217;s part of the problem I have: that it&#8217;s incredibly hard to find any
+form of best practices or style guide on code layout in node.js.  It&#8217;s
 something I would expect to find on the node.js website itself, like a
 style guide for keeping you from having to scroll your editor sideways
-to read an entire line.&lt;/p&gt;
+to read an entire line.</p>
 
-&lt;h2&gt;Callbacks&lt;/h2&gt;
+<h2>Callbacks</h2>
 
-&lt;p&gt;node.js has the philosophy that your callback will be a function, the
+<p>node.js has the philosophy that your callback will be a function, the
 first argument of which could be an error.  Your callbacks then end up
 with conditional logic in them based on the presence of this parameter,
 which, to me, completely violates object oriented programming.  Rather
-than writing:&lt;/p&gt;
+than writing:</p>
 
-&lt;div&gt;&lt;figure role=code&gt;&lt;figcaption&gt;&lt;span&gt;node-callbacks.js &lt;/span&gt;&lt;/figcaption&gt;
- &lt;div class=&quot;highlight&quot;&gt;&lt;table cellpadding=&quot;0&quot; cellspacing=&quot;0&quot;&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class='line'&gt;1&lt;/span&gt;
-&lt;span class='line'&gt;2&lt;/span&gt;
-&lt;span class='line'&gt;3&lt;/span&gt;
-&lt;span class='line'&gt;4&lt;/span&gt;
-&lt;span class='line'&gt;5&lt;/span&gt;
-&lt;span class='line'&gt;6&lt;/span&gt;
-&lt;span class='line'&gt;7&lt;/span&gt;
-&lt;/pre&gt;&lt;/td&gt;&lt;td class='code' width='100%'&gt;&lt;pre&gt;&lt;code class='js'&gt;&lt;div class='line'&gt;&lt;span class=&quot;nx&quot;&gt;my_asynchronous_thing&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;some_method&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;err&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-&lt;/div&gt;&lt;div class='line'&gt;  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-&lt;/div&gt;&lt;div class='line'&gt;    &lt;span class=&quot;c1&quot;&gt;// Do something on error&lt;/span&gt;
-&lt;/div&gt;&lt;div class='line'&gt;  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-&lt;/div&gt;&lt;div class='line'&gt;    &lt;span class=&quot;c1&quot;&gt;// Do something on success&lt;/span&gt;
-&lt;/div&gt;&lt;div class='line'&gt;  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/div&gt;&lt;div class='line'&gt;&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
-&lt;/div&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/div&gt;
-
-
-&lt;p&gt;I would much rather see the callback as an object with &lt;code&gt;error&lt;/code&gt; and
-&lt;code&gt;success&lt;/code&gt; functions:&lt;/p&gt;
-
-&lt;div&gt;&lt;figure role=code&gt;&lt;figcaption&gt;&lt;span&gt;object-callbacks.js &lt;/span&gt;&lt;/figcaption&gt;
- &lt;div class=&quot;highlight&quot;&gt;&lt;table cellpadding=&quot;0&quot; cellspacing=&quot;0&quot;&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre class=&quot;line-numbers&quot;&gt;&lt;span class='line'&gt;1&lt;/span&gt;
-&lt;span class='line'&gt;2&lt;/span&gt;
-&lt;span class='line'&gt;3&lt;/span&gt;
-&lt;span class='line'&gt;4&lt;/span&gt;
-&lt;span class='line'&gt;5&lt;/span&gt;
-&lt;span class='line'&gt;6&lt;/span&gt;
-&lt;span class='line'&gt;7&lt;/span&gt;
-&lt;span class='line'&gt;8&lt;/span&gt;
-&lt;/pre&gt;&lt;/td&gt;&lt;td class='code' width='100%'&gt;&lt;pre&gt;&lt;code class='js'&gt;&lt;div class='line'&gt;&lt;span class=&quot;nx&quot;&gt;my_asynchronous_thing&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;some_method&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt;
-&lt;/div&gt;&lt;div class='line'&gt;  &lt;span class=&quot;nx&quot;&gt;error&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;error_object&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-&lt;/div&gt;&lt;div class='line'&gt;    &lt;span class=&quot;c1&quot;&gt;// Do something on error&lt;/span&gt;
-&lt;/div&gt;&lt;div class='line'&gt;  &lt;span class=&quot;p&quot;&gt;},&lt;/span&gt;
-&lt;/div&gt;&lt;div class='line'&gt;  &lt;span class=&quot;nx&quot;&gt;success&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-&lt;/div&gt;&lt;div class='line'&gt;    &lt;span class=&quot;c1&quot;&gt;// Do something on success&lt;/span&gt;
-&lt;/div&gt;&lt;div class='line'&gt;  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/div&gt;&lt;div class='line'&gt;&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
-&lt;/div&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/div&gt;
+<figure class='code'><figcaption><span>node-callbacks.js </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">my_asynchronous_thing</span><span class="p">.</span><span class="nx">some_method</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="nx">err</span> <span class="o">!=</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="c1">// Do something on error</span>
+</span><span class='line'>  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>    <span class="c1">// Do something on success</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-&lt;p&gt;It seems odd, to me, that something built in a properly object oriented
-language wouldn't take advantage of this.  I felt like I was back
-writing C code!  Maybe I'm missing something?&lt;/p&gt;
+<p>I would much rather see the callback as an object with <code>error</code> and
+<code>success</code> functions:</p>
 
-&lt;h2&gt;Documentation&lt;/h2&gt;
+<figure class='code'><figcaption><span>object-callbacks.js </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="nx">my_asynchronous_thing</span><span class="p">.</span><span class="nx">some_method</span><span class="p">({</span>
+</span><span class='line'>  <span class="nx">error</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error_object</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="c1">// Do something on error</span>
+</span><span class='line'>  <span class="p">},</span>
+</span><span class='line'>  <span class="nx">success</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="c1">// Do something on success</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
 
-&lt;p&gt;I picked &lt;a href=&quot;http://mongoosejs.com/&quot;&gt;Mongoose&lt;/a&gt; as my interface to MongoDB
+
+<p>It seems odd, to me, that something built in a properly object oriented
+language wouldn&#8217;t take advantage of this.  I felt like I was back
+writing C code!  Maybe I&#8217;m missing something?</p>
+
+<h2>Documentation</h2>
+
+<p>I picked <a href="http://mongoosejs.com/">Mongoose</a> as my interface to MongoDB
 from node.js because it looked like it would offer a reasonable amount
-of extras.  Coming from the &lt;a href=&quot;htp://rubyonrails.org/&quot;&gt;Rails&lt;/a&gt; world I like
+of extras.  Coming from the <a href="htp://rubyonrails.org/">Rails</a> world I like
 the idea of being able to specify validations on my database models, and
-this is something that Mongoose provides.&lt;/p&gt;
+this is something that Mongoose provides.</p>
 
-&lt;p&gt;My main problem with this module is that the documentation is lacking.
-Yes, it &lt;em&gt;has&lt;/em&gt; documentation, and lots of it by the looks of things.  The
-problem is that it's contradictory: at one point it says you can
-validate strings with regular expressions using &lt;code&gt;validate&lt;/code&gt;, then it's
-&lt;code&gt;match&lt;/code&gt;.&lt;/p&gt;
+<p>My main problem with this module is that the documentation is lacking.
+Yes, it <em>has</em> documentation, and lots of it by the looks of things.  The
+problem is that it&#8217;s contradictory: at one point it says you can
+validate strings with regular expressions using <code>validate</code>, then it&#8217;s
+<code>match</code>.</p>
 
-&lt;p&gt;Given that mismatch I started to lose trust in what I was writing, when
-the validations weren't being run, and faith in the documentation
-itself.  So I dug around the code to find what I needed, but that isn't
-something I should have to do, or was very successful doing.&lt;/p&gt;
-</content>
+<p>Given that mismatch I started to lose trust in what I was writing, when
+the validations weren&#8217;t being run, and faith in the documentation
+itself.  So I dug around the code to find what I needed, but that isn&#8217;t
+something I should have to do, or was very successful doing.</p>
+]]></content>
   </entry>
   
   <entry>
-    <title>36 Years Down</title>
+    <title type="html"><![CDATA[36 Years Down]]></title>
     <link href="http://mattdenner.github.com//blog/2011/08/11/36-years-down/"/>
     <updated>2011-08-11T19:16:00+01:00</updated>
     <id>http://mattdenner.github.com//blog/2011/08/11/36-years-down</id>
-    <content type="html">&lt;p&gt;So yesterday was my 36th birthday. A reflection of the last year is
-something I need to do, even if you don't want to read it!&lt;/p&gt;
+    <content type="html"><![CDATA[<p>So yesterday was my 36th birthday. A reflection of the last year is
+something I need to do, even if you don&#8217;t want to read it!</p>
 
-&lt;!--more--&gt;
+<!--more-->
 
 
-&lt;p&gt;I don't celebrate my birthday because, to me, it's just another day but
-recently it's been more because it reminds me of my failings.  The past
-year has been even more of a reminder and it's something I want to
-correct in the coming twelve months.&lt;/p&gt;
+<p>I don&#8217;t celebrate my birthday because, to me, it&#8217;s just another day but
+recently it&#8217;s been more because it reminds me of my failings.  The past
+year has been even more of a reminder and it&#8217;s something I want to
+correct in the coming twelve months.</p>
 
-&lt;p&gt;So, in no particular order here's the past year:&lt;/p&gt;
+<p>So, in no particular order here&#8217;s the past year:</p>
 
-&lt;ul&gt;
-&lt;li&gt;Started a job at &lt;a href=&quot;http://sanger.ac.uk/&quot;&gt;The Wellcome Trust Sanger Institute&lt;/a&gt;
+<ul>
+<li>Started a job at <a href="http://sanger.ac.uk/">The Wellcome Trust Sanger Institute</a>
 as a junior developer; got promoted to senior in January; promoted to
-Principle in July.&lt;/li&gt;
-&lt;li&gt;Lost the most important relationship and one of my most trusted friends
-because I'm not the person I should be.&lt;/li&gt;
-&lt;li&gt;Finally visited New York and had the best time, even though I was on
-my own.&lt;/li&gt;
-&lt;li&gt;Skated, but not enough.&lt;/li&gt;
-&lt;li&gt;Made some new friends, which is unusual for me as I'm very protective
-of myself.&lt;/li&gt;
-&lt;li&gt;Spent Christmas with the folks for the first time in years, then
-promptly didn't see them for 8 months.&lt;/li&gt;
-&lt;li&gt;Made myself quite ill for a few months.&lt;/li&gt;
-&lt;/ul&gt;
+Principle in July.</li>
+<li>Lost the most important relationship and one of my most trusted friends
+because I&#8217;m not the person I should be.</li>
+<li>Finally visited New York and had the best time, even though I was on
+my own.</li>
+<li>Skated, but not enough.</li>
+<li>Made some new friends, which is unusual for me as I&#8217;m very protective
+of myself.</li>
+<li>Spent Christmas with the folks for the first time in years, then
+promptly didn&#8217;t see them for 8 months.</li>
+<li>Made myself quite ill for a few months.</li>
+</ul>
 
 
-&lt;p&gt;And for 2011 into 2012:&lt;/p&gt;
+<p>And for 2011 into 2012:</p>
 
-&lt;ul&gt;
-&lt;li&gt;Decided that Erlang and Haskell are the next programming languages for
-me to learn, properly.&lt;/li&gt;
-&lt;li&gt;I'm going to make the team at the WTSI the best team at the WTSI.&lt;/li&gt;
-&lt;li&gt;Speaking and reading Mandarin, at least to a level where I feel I
-could get by.&lt;/li&gt;
-&lt;li&gt;Go back to New York, because it was one of the best breaks I've had
-and I want to do more there.&lt;/li&gt;
-&lt;li&gt;Present at a conference, preferably outside of the UK.&lt;/li&gt;
-&lt;li&gt;Skate more, and maybe abroad more often.&lt;/li&gt;
-&lt;/ul&gt;
+<ul>
+<li>Decided that Erlang and Haskell are the next programming languages for
+me to learn, properly.</li>
+<li>I&#8217;m going to make the team at the WTSI the best team at the WTSI.</li>
+<li>Speaking and reading Mandarin, at least to a level where I feel I
+could get by.</li>
+<li>Go back to New York, because it was one of the best breaks I&#8217;ve had
+and I want to do more there.</li>
+<li>Present at a conference, preferably outside of the UK.</li>
+<li>Skate more, and maybe abroad more often.</li>
+</ul>
 
-</content>
+]]></content>
   </entry>
   
 </feed>
