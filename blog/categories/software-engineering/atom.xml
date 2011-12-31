@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Software engineering | Words, code, skates]]></title>
   <link href="http://mattdenner.github.com//blog/categories/software-engineering/atom.xml" rel="self"/>
   <link href="http://mattdenner.github.com//"/>
-  <updated>2011-11-22T19:15:04+00:00</updated>
+  <updated>2011-12-31T08:37:11+00:00</updated>
   <id>http://mattdenner.github.com//</id>
   <author>
     <name><![CDATA[Matthew Denner]]></name>
@@ -12,6 +12,219 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Disagreement #2]]></title>
+    <link href="http://mattdenner.github.com//blog/2011/11/23/disagreement-number-2/"/>
+    <updated>2011-11-23T20:56:00+00:00</updated>
+    <id>http://mattdenner.github.com//blog/2011/11/23/disagreement-number-2</id>
+    <content type="html"><![CDATA[<p>Following on from <a href="/blog/2011/11/22/disagreement--1/">my previous disagreement</a>, here's the second one I've been having:</p>
+
+<p>You should code to the language and the environment you are in.  That
+means taking advantage of the features of the languages and the
+frameworks that you use.</p>
+
+<!-- more -->
+
+
+<p>This all comes about because, at work, we are rewriting our main
+product as it has become overburdened with issues that come about
+because of the history of the codebase.  It's been hacked about, forced
+to do things it shouldn't, and had some bad engineering decisions pushed
+into it.</p>
+
+<p>The biggest issue we have moving forward is that both the existing
+system and the new one will have to run in parallel, and on the same
+database, for a period.  The data we have isn't in the best of states
+and the schema itself needs some serious work to make it better, which
+is not something that is possible in the timeframe we have to rewrite.</p>
+
+<p>To allow us to place build better models on the existing schema we're
+going to have to do some serious work and I believe that we should take
+advantage of some of the abilities of Ruby.  Where the existing system
+has a large class hierarchy some areas we can flatten this and use the
+singleton class to add behaviour to objects at runtime.</p>
+
+<p>Let me try to put this in terms of an example:</p>
+
+<p>Pretend that you're making a cup of tea.  You have to transfer the water
+in the kettle to a tea cup, then you have to pour the milk from the jug
+to the tea cup.</p>
+
+<p>In our existing system these transfers were seen as two different
+classes of transfer, but the source and target were seen as containers.
+In other words:</p>
+
+<p>```ruby
+class Container ; end
+class Kettle &lt; Container ; end
+class TeaCup &lt; Container ; end
+class Jug &lt; Container ; end</p>
+
+<p>class TransferType
+  validates_presence_of :name
+  has_many :transfers
+end
+class Transfer
+  belongs_to :transfer_type
+  belongs_to :source, :class_name => 'Container'
+  belongs_to :target, :class_name => 'Container'
+end
+class KettleToTeaCup &lt; Transfer ; end
+class MilkJugToTeaCup &lt; Transfer ; end
+```</p>
+
+<p>That is almost identical to the code we have.</p>
+
+<p>The <code>TransferType</code> class is there to provide a description of the type
+of transfer, for the UI mainly, but it plays an important part in what
+I'm going to talk about.</p>
+
+<p>This is wrong on so many levels but let's start with the one I'm
+bothered by the most, which is the fact that I can do this:</p>
+
+<p><code>ruby
+KettleToTeaCup.new(:source =&gt; TeaCup.new, :target =&gt; Jug.new)
+</code></p>
+
+<p>Yes, I can say that I want to do a kettle-to-tea-cup transfer <strong>from</strong> a
+tea cup <strong>to</strong> a jug!  It makes no sense.  And, believe me, people try.</p>
+
+<p>In the new code I would like to avoid this but, more importantly, I
+don't see that the transfer needs to have its own class because we
+already have the <code>TransferType</code> class which kind of does that.</p>
+
+<p>What I'm trying to advocate is that we can inject behaviour, from the
+transfer type, into a transfer.  In other words:</p>
+
+<p>```ruby
+class TransferType
+  validates_presence_of :name
+  serialize :behaviours
+  has_many :transfers</p>
+
+<p>  def inject_behaviour_into(record)</p>
+
+<pre><code>behaviours.each do |module_name|
+  record.extend(module_name.constantize)
+end
+</code></pre>
+
+<p>  end
+end</p>
+
+<p>class Transfer
+  belongs_to :transfer_type
+  after_initialize :inject_transfer_behaviour</p>
+
+<p>  def inject_transfer_behaviour</p>
+
+<pre><code>request_type.inject_behaviour_into(self)
+</code></pre>
+
+<p>  end
+  private :inject_transfer_behaviour
+end
+```</p>
+
+<p>So now you'd write:</p>
+
+<p><code>ruby
+TransferType.find_by_name('Pour kettle into tea cup').transfers.create!(:source =&gt; Kettle.new, :target =&gt; TeaCup.new)
+</code></p>
+
+<p>How do the source and target relationships get setup?  By having a
+couple of modules:</p>
+
+<p>```ruby
+module KettleSource
+  def self.extended(base)</p>
+
+<pre><code>base.singleton_class.belongs_to(:source, :class_name =&gt; 'Kettle')
+</code></pre>
+
+<p>  end
+end
+module TeaCupTarget
+  def self.extended(base)</p>
+
+<pre><code>base.singleton_class.belongs_to(:target, :class_name =&gt; 'TeaCup')
+</code></pre>
+
+<p>  end
+end
+```</p>
+
+<p>And then defining:</p>
+
+<p><code>ruby
+TransferType.create!(
+  :name =&gt; 'Pour kettle into tea cup',
+  :behaviours =&gt; [ 'KettleSource', 'TeaCupTarget' ]
+)
+</code></p>
+
+<p>What use is that?  Well:</p>
+
+<p>We're guaranteeing that you can't do the tea cup to jug transfer that I
+demonstrated earlier because the associations are defined.  The real
+advantage here is that we can get rid of the Container base class and put
+tea cups in a tea_cups table, kettles in a kettles table, etc.  We have
+a definitive relationship without having to resort to polymorpism.
+Unfortunately we lose the ability to put in a foreign key relationship.</p>
+
+<p>Also, the number of modules you require will aways be equal to, or
+better than, the number of derived classes you would have to create.  At
+3 types of "container" you have 6 modules (kettle as source, kettle as
+target, tea cup as source, etc) but you'd have 9 classes (kettle-kettle,
+kettle-tea cup, kettle-jug, tea cup-kettle, tea cup-tea cup, etc) in
+order to get the same behaviours.  In other words, we are more flexible
+with modules being injected.</p>
+
+<p>I've over simplified the actual structure here.  In our existing
+codebase someone has added a derived class that does not have a source
+or target but references a "container" by abusing the source_id field,
+and still calling it "source".  In my suggested way we could do:</p>
+
+<p>```ruby
+module OneThing
+  def self.extended(base)</p>
+
+<pre><code>base.singleton_class.belongs_to(:tea_cup, :foreign_key =&gt; :source_id, :class_name =&gt; 'TeaCup')
+</code></pre>
+
+<p>  end
+end</p>
+
+<p>TransferType.create!(
+  :name => 'Do nothing with a teacup',
+  :behaviours => [ 'OneThing' ]
+)
+```</p>
+
+<p>Point being: if a transfer created through this type was passed to a
+method that expected source or target to be defined on it the code would
+blow up, not silently do something stupid.</p>
+
+<p>The problem I face is that people who are used to a statically typed
+language favour the hierarchy, even though Ruby does not enforce it.
+Ruby is dynamic: as long as an object responds to a method why not call
+it?  Why do we need to know that its a particular type?</p>
+
+<p>These people do not see that this is actually a big plus.  This
+technique (which is, in a way I'm guessing, <a href="http://en.wikipedia.org/wiki/Data,_context_and_interaction">DCI</a>)
+would enable the new code to be far more flexible and far better
+defined, even though it is based on the same data schema.</p>
+
+<p>But, yet again, I have no reason that my suggestion is any better other
+than my "gut".  I'm going to suggest it, and I've written code to do
+this as a prototype, but I have a suspicion it'll be rejected.  I'm not
+bothered that someone who's going to be coding this (as I'm probably not
+going to be far too busy to help out) chooses not to do it because they
+don't understand it, but I think it'll only be refused because of the
+classical statically typed mentality.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Disagreement #1]]></title>

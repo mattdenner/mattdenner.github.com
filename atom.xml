@@ -4,7 +4,7 @@
   <title><![CDATA[Words, code, skates]]></title>
   <link href="http://mattdenner.github.com//atom.xml" rel="self"/>
   <link href="http://mattdenner.github.com//"/>
-  <updated>2011-11-22T19:15:04+00:00</updated>
+  <updated>2011-12-31T08:37:11+00:00</updated>
   <id>http://mattdenner.github.com//</id>
   <author>
     <name><![CDATA[Matthew Denner]]></name>
@@ -12,6 +12,324 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[2011: in review]]></title>
+    <link href="http://mattdenner.github.com//blog/2011/12/31/2011-in-review/"/>
+    <updated>2011-12-31T07:53:00+00:00</updated>
+    <id>http://mattdenner.github.com//blog/2011/12/31/2011-in-review</id>
+    <content type="html"><![CDATA[<p>It would be remiss of me not to do a look back over 2011 and to gaze into the future of 2012, seeing as that&#8217;s what people are supposed to do at this
+time of year.</p>
+
+<!--more-->
+
+
+<p>This hasn&#8217;t been my greatest year so far, and I certainly won&#8217;t miss it when it&#8217;s gone tomorrow:</p>
+
+<p>Emotionally it&#8217;s been awful: at the beginning of the year the friendship between my ex-girlfriend and myself became strained and I decided to take a
+few months to think about what to do about it.  I ended up in New York for a week trying to sort myself out, which worked out far better than I
+expected.  A few weeks after I returned to the UK, in which I gave myself time to be sure that what I&#8217;d decided was the right thing to do, I contacted
+her about trying to work things out.  Unfortunately I don&#8217;t feel she saw things the same way, ignoring my attempts to make peace, so in the middle of
+the year I decided it was better to not see each other again.</p>
+
+<p>It&#8217;s one of the hardest things I&#8217;ve had to do, especially considering I wanted to spend the rest of my life with her, but when there&#8217;s an imbalance in
+any relationship that causes a detriment to your mental health it is better to walk away.  I still think about her, not as much as I used to, and I
+wish things had turned out different, but I do not regret my decision in the slightest (ok, the Christmas card from her parents made me feel like a
+shit).</p>
+
+<p>The stress at work has been a bit of a rollercoaster over the year: the year started with a promotion, and then another around July, followed by a
+hefty piece of work that racked up several weeks of long hours.  But it&#8217;s the end of the year, the last couple of months, that have really pushed me.
+The internal piece of software we develop is to be rewritten, from scratch, as the old codebase has become too unwieldy and unmaintainable; as
+principle of the team it&#8217;s my responsibility to design, propose, and follow through with a better architecture, which is hard given the responses.
+Where I expected the team to be supportive and positive about the situation, given that only a few months ago our jobs were essentially on-the-line, I
+was met with disdain and negativity; I thought that people external to the team would fight me at every turn but, instead, they gave positive and
+constructive feedback.</p>
+
+<p>The truth is that some in the team have entered the negative mentality associated with a project-death-spiral, and don&#8217;t appear to be able to do
+anything about it.  I admit, and anyone who follows me on Twitter will know, that I complain about the state of our code; but given this opportunity
+to put some things right, without having to deal with the awful code we have, I relish the chance.  To stand in a room giving a presentation on
+the proposed architecture, only to be criticised and not receive any thanks, was demoralising: given I lost ten days worth of holiday to do this
+I feel like those people who think it&#8217;s crap, or won&#8217;t work, owe me some of theirs.</p>
+
+<p>Out of these bad things that have been happening I have discovered several things: I&#8217;ve made a couple of good friends over this period, and
+that I can count on a friend I&#8217;ve known for the last few years; I&#8217;ve become more sure of my technical self having read and watched stuff on the
+internet; and I know that, no matter how dark it can get, there is always something to look forward to.</p>
+
+<p>What does 2012 hold for me?</p>
+
+<p>The rewrite at work is going to be a challenge but I firmly believe it will work out and we&#8217;ll be better off, provided we can ditch all of the
+negativity and focus on the opportunity.</p>
+
+<p>I&#8217;m going to put aside an hour a day where I just do something for myself: given I want to learn Mandarin, and haven&#8217;t been able to find time to do so,
+I&#8217;m going to return to that this coming year.  I&#8217;ve already learned <span xml:lang="zh" lang="zh">这需要时间</span>: &#8220;It takes time&#8221;.</p>
+
+<p>With the Olympics arriving in town this summer I guess I&#8217;m going to be heading into London quite a bit over the summer.  I haven&#8217;t got tickets but just
+to be around the event will be interesting, and I&#8217;m sure there will be a lot happening.  I completely expect a couple of themed street skates!</p>
+
+<p>And I&#8217;m already looking into heading back to New York and debating a trip to the west coast towards the end of the year.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Disagreement #2]]></title>
+    <link href="http://mattdenner.github.com//blog/2011/11/23/disagreement-number-2/"/>
+    <updated>2011-11-23T20:56:00+00:00</updated>
+    <id>http://mattdenner.github.com//blog/2011/11/23/disagreement-number-2</id>
+    <content type="html"><![CDATA[<p>Following on from <a href="http://mattdenner.github.com//blog/2011/11/22/disagreement--1/">my previous disagreement</a>, here&#8217;s the second one I&#8217;ve been having:</p>
+
+<p>You should code to the language and the environment you are in.  That
+means taking advantage of the features of the languages and the
+frameworks that you use.</p>
+
+<!-- more -->
+
+
+<p>This all comes about because, at work, we are rewriting our main
+product as it has become overburdened with issues that come about
+because of the history of the codebase.  It&#8217;s been hacked about, forced
+to do things it shouldn&#8217;t, and had some bad engineering decisions pushed
+into it.</p>
+
+<p>The biggest issue we have moving forward is that both the existing
+system and the new one will have to run in parallel, and on the same
+database, for a period.  The data we have isn&#8217;t in the best of states
+and the schema itself needs some serious work to make it better, which
+is not something that is possible in the timeframe we have to rewrite.</p>
+
+<p>To allow us to place build better models on the existing schema we&#8217;re
+going to have to do some serious work and I believe that we should take
+advantage of some of the abilities of Ruby.  Where the existing system
+has a large class hierarchy some areas we can flatten this and use the
+singleton class to add behaviour to objects at runtime.</p>
+
+<p>Let me try to put this in terms of an example:</p>
+
+<p>Pretend that you&#8217;re making a cup of tea.  You have to transfer the water
+in the kettle to a tea cup, then you have to pour the milk from the jug
+to the tea cup.</p>
+
+<p>In our existing system these transfers were seen as two different
+classes of transfer, but the source and target were seen as containers.
+In other words:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Container</span> <span class="p">;</span> <span class="k">end</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">Kettle</span> <span class="o">&lt;</span> <span class="no">Container</span> <span class="p">;</span> <span class="k">end</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">TeaCup</span> <span class="o">&lt;</span> <span class="no">Container</span> <span class="p">;</span> <span class="k">end</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">Jug</span> <span class="o">&lt;</span> <span class="no">Container</span> <span class="p">;</span> <span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">TransferType</span>
+</span><span class='line'>  <span class="n">validates_presence_of</span> <span class="ss">:name</span>
+</span><span class='line'>  <span class="n">has_many</span> <span class="ss">:transfers</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">Transfer</span>
+</span><span class='line'>  <span class="n">belongs_to</span> <span class="ss">:transfer_type</span>
+</span><span class='line'>  <span class="n">belongs_to</span> <span class="ss">:source</span><span class="p">,</span> <span class="ss">:class_name</span> <span class="o">=&gt;</span> <span class="s1">&#39;Container&#39;</span>
+</span><span class='line'>  <span class="n">belongs_to</span> <span class="ss">:target</span><span class="p">,</span> <span class="ss">:class_name</span> <span class="o">=&gt;</span> <span class="s1">&#39;Container&#39;</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">KettleToTeaCup</span> <span class="o">&lt;</span> <span class="no">Transfer</span> <span class="p">;</span> <span class="k">end</span>
+</span><span class='line'><span class="k">class</span> <span class="nc">MilkJugToTeaCup</span> <span class="o">&lt;</span> <span class="no">Transfer</span> <span class="p">;</span> <span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>That is almost identical to the code we have.</p>
+
+<p>The <code>TransferType</code> class is there to provide a description of the type
+of transfer, for the UI mainly, but it plays an important part in what
+I&#8217;m going to talk about.</p>
+
+<p>This is wrong on so many levels but let&#8217;s start with the one I&#8217;m
+bothered by the most, which is the fact that I can do this:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">KettleToTeaCup</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">:source</span> <span class="o">=&gt;</span> <span class="no">TeaCup</span><span class="o">.</span><span class="n">new</span><span class="p">,</span> <span class="ss">:target</span> <span class="o">=&gt;</span> <span class="no">Jug</span><span class="o">.</span><span class="n">new</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Yes, I can say that I want to do a kettle-to-tea-cup transfer <strong>from</strong> a
+tea cup <strong>to</strong> a jug!  It makes no sense.  And, believe me, people try.</p>
+
+<p>In the new code I would like to avoid this but, more importantly, I
+don&#8217;t see that the transfer needs to have its own class because we
+already have the <code>TransferType</code> class which kind of does that.</p>
+
+<p>What I&#8217;m trying to advocate is that we can inject behaviour, from the
+transfer type, into a transfer.  In other words:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">TransferType</span>
+</span><span class='line'>  <span class="n">validates_presence_of</span> <span class="ss">:name</span>
+</span><span class='line'>  <span class="n">serialize</span> <span class="ss">:behaviours</span>
+</span><span class='line'>  <span class="n">has_many</span> <span class="ss">:transfers</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">inject_behaviour_into</span><span class="p">(</span><span class="n">record</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">behaviours</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">module_name</span><span class="o">|</span>
+</span><span class='line'>      <span class="n">record</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">module_name</span><span class="o">.</span><span class="n">constantize</span><span class="p">)</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">class</span> <span class="nc">Transfer</span>
+</span><span class='line'>  <span class="n">belongs_to</span> <span class="ss">:transfer_type</span>
+</span><span class='line'>  <span class="n">after_initialize</span> <span class="ss">:inject_transfer_behaviour</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">inject_transfer_behaviour</span>
+</span><span class='line'>    <span class="n">request_type</span><span class="o">.</span><span class="n">inject_behaviour_into</span><span class="p">(</span><span class="nb">self</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>  <span class="kp">private</span> <span class="ss">:inject_transfer_behaviour</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>So now you&#8217;d write:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">TransferType</span><span class="o">.</span><span class="n">find_by_name</span><span class="p">(</span><span class="s1">&#39;Pour kettle into tea cup&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">transfers</span><span class="o">.</span><span class="n">create!</span><span class="p">(</span><span class="ss">:source</span> <span class="o">=&gt;</span> <span class="no">Kettle</span><span class="o">.</span><span class="n">new</span><span class="p">,</span> <span class="ss">:target</span> <span class="o">=&gt;</span> <span class="no">TeaCup</span><span class="o">.</span><span class="n">new</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>How do the source and target relationships get setup?  By having a
+couple of modules:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">module</span> <span class="nn">KettleSource</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">extended</span><span class="p">(</span><span class="n">base</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">base</span><span class="o">.</span><span class="n">singleton_class</span><span class="o">.</span><span class="n">belongs_to</span><span class="p">(</span><span class="ss">:source</span><span class="p">,</span> <span class="ss">:class_name</span> <span class="o">=&gt;</span> <span class="s1">&#39;Kettle&#39;</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="k">module</span> <span class="nn">TeaCupTarget</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">extended</span><span class="p">(</span><span class="n">base</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">base</span><span class="o">.</span><span class="n">singleton_class</span><span class="o">.</span><span class="n">belongs_to</span><span class="p">(</span><span class="ss">:target</span><span class="p">,</span> <span class="ss">:class_name</span> <span class="o">=&gt;</span> <span class="s1">&#39;TeaCup&#39;</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And then defining:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">TransferType</span><span class="o">.</span><span class="n">create!</span><span class="p">(</span>
+</span><span class='line'>  <span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s1">&#39;Pour kettle into tea cup&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">:behaviours</span> <span class="o">=&gt;</span> <span class="o">[</span> <span class="s1">&#39;KettleSource&#39;</span><span class="p">,</span> <span class="s1">&#39;TeaCupTarget&#39;</span> <span class="o">]</span>
+</span><span class='line'><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>What use is that?  Well:</p>
+
+<p>We&#8217;re guaranteeing that you can&#8217;t do the tea cup to jug transfer that I
+demonstrated earlier because the associations are defined.  The real
+advantage here is that we can get rid of the Container base class and put
+tea cups in a tea_cups table, kettles in a kettles table, etc.  We have
+a definitive relationship without having to resort to polymorpism.
+Unfortunately we lose the ability to put in a foreign key relationship.</p>
+
+<p>Also, the number of modules you require will aways be equal to, or
+better than, the number of derived classes you would have to create.  At
+3 types of &#8220;container&#8221; you have 6 modules (kettle as source, kettle as
+target, tea cup as source, etc) but you&#8217;d have 9 classes (kettle-kettle,
+kettle-tea cup, kettle-jug, tea cup-kettle, tea cup-tea cup, etc) in
+order to get the same behaviours.  In other words, we are more flexible
+with modules being injected.</p>
+
+<p>I&#8217;ve over simplified the actual structure here.  In our existing
+codebase someone has added a derived class that does not have a source
+or target but references a &#8220;container&#8221; by abusing the source_id field,
+and still calling it &#8220;source&#8221;.  In my suggested way we could do:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">module</span> <span class="nn">OneThing</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">extended</span><span class="p">(</span><span class="n">base</span><span class="p">)</span>
+</span><span class='line'>    <span class="n">base</span><span class="o">.</span><span class="n">singleton_class</span><span class="o">.</span><span class="n">belongs_to</span><span class="p">(</span><span class="ss">:tea_cup</span><span class="p">,</span> <span class="ss">:foreign_key</span> <span class="o">=&gt;</span> <span class="ss">:source_id</span><span class="p">,</span> <span class="ss">:class_name</span> <span class="o">=&gt;</span> <span class="s1">&#39;TeaCup&#39;</span><span class="p">)</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">TransferType</span><span class="o">.</span><span class="n">create!</span><span class="p">(</span>
+</span><span class='line'>  <span class="ss">:name</span> <span class="o">=&gt;</span> <span class="s1">&#39;Do nothing with a teacup&#39;</span><span class="p">,</span>
+</span><span class='line'>  <span class="ss">:behaviours</span> <span class="o">=&gt;</span> <span class="o">[</span> <span class="s1">&#39;OneThing&#39;</span> <span class="o">]</span>
+</span><span class='line'><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Point being: if a transfer created through this type was passed to a
+method that expected source or target to be defined on it the code would
+blow up, not silently do something stupid.</p>
+
+<p>The problem I face is that people who are used to a statically typed
+language favour the hierarchy, even though Ruby does not enforce it.
+Ruby is dynamic: as long as an object responds to a method why not call
+it?  Why do we need to know that its a particular type?</p>
+
+<p>These people do not see that this is actually a big plus.  This
+technique (which is, in a way I&#8217;m guessing, <a href="http://en.wikipedia.org/wiki/Data,_context_and_interaction">DCI</a>)
+would enable the new code to be far more flexible and far better
+defined, even though it is based on the same data schema.</p>
+
+<p>But, yet again, I have no reason that my suggestion is any better other
+than my &#8220;gut&#8221;.  I&#8217;m going to suggest it, and I&#8217;ve written code to do
+this as a prototype, but I have a suspicion it&#8217;ll be rejected.  I&#8217;m not
+bothered that someone who&#8217;s going to be coding this (as I&#8217;m probably not
+going to be far too busy to help out) chooses not to do it because they
+don&#8217;t understand it, but I think it&#8217;ll only be refused because of the
+classical statically typed mentality.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Disagreement #1]]></title>
