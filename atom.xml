@@ -4,7 +4,7 @@
   <title><![CDATA[Words, code, skates]]></title>
   <link href="http://mattdenner.github.com//atom.xml" rel="self"/>
   <link href="http://mattdenner.github.com//"/>
-  <updated>2012-03-18T12:00:40+00:00</updated>
+  <updated>2012-03-18T17:12:12+00:00</updated>
   <id>http://mattdenner.github.com//</id>
   <author>
     <name><![CDATA[Matthew Denner]]></name>
@@ -12,6 +12,192 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Play framework 2.0 (part 1)]]></title>
+    <link href="http://mattdenner.github.com//blog/2012/03/18/play-framework-2-dot-0-part-1/"/>
+    <updated>2012-03-18T16:25:00+00:00</updated>
+    <id>http://mattdenner.github.com//blog/2012/03/18/play-framework-2-dot-0-part-1</id>
+    <content type="html"><![CDATA[<p>I&#8217;m just starting out learning <a href="http://scala-lang.org/">Scala</a> and the <a href="http://playframework.org/">Play 2.0 framework</a> and the experience isn&#8217;t half of what I got from learning
+Ruby and Ruby-on-Rails.  I think that this is, in part, due to the lack of decent tutorials for the Play 2.0 framework, which I appreciate is new, and the frustration that
+comes from not being able to find information.  So, I hope that the next few posts will document my journey and help you on yours.</p>
+
+<!--more-->
+
+
+<p>I&#8217;m going to leave installing Scala and the Play 2.0 framework to you, but the quick instructions, for those of you on Mac OS X with <a href="http://mxcl.github.com/homebrew/">homebrew</a>
+installed and running zsh, is:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='console'><span class='line'><span class="gp">$</span> brew install scala
+</span><span class='line'><span class="gp">$</span> mkdir messing_with_play
+</span><span class='line'><span class="gp">$</span> <span class="nb">cd </span>messing_with_play
+</span><span class='line'><span class="gp">$</span> wget http://download.playframework.org/releases/play-2.0.zip
+</span><span class='line'><span class="gp">$</span> unzip play-2.0.zip
+</span><span class='line'><span class="gp">$</span> path+<span class="o">=(</span><span class="sb">`</span><span class="nb">pwd</span><span class="sb">`</span>/play-2.0<span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Once installed you can create a new application with:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+</pre></td><td class='code'><pre><code class='console'><span class='line'><span class="gp">$</span> play new my_first_application
+</span><span class='line'><span class="go">       _            _</span>
+</span><span class='line'><span class="go"> _ __ | | __ _ _  _| |</span>
+</span><span class='line'><span class="go">| &#39;_ \| |/ _&#39; | || |_|</span>
+</span><span class='line'><span class="go">|  __/|_|\____|\__ (_)</span>
+</span><span class='line'><span class="go">|_|            |__/</span>
+</span><span class='line'>
+</span><span class='line'><span class="go">play! 2.0, http://www.playframework.org</span>
+</span><span class='line'>
+</span><span class='line'><span class="go">The new application will be created in /Users/matt/messing_with_play/my_first_application</span>
+</span><span class='line'>
+</span><span class='line'><span class="go">What is the application name?</span>
+</span><span class='line'><span class="gp">&gt;</span> my_first_application
+</span><span class='line'>
+</span><span class='line'><span class="go">Which template do you want to use for this new application?</span>
+</span><span class='line'>
+</span><span class='line'><span class="go">  1 - Create a simple Scala application</span>
+</span><span class='line'><span class="go">  2 - Create a simple Java application</span>
+</span><span class='line'><span class="go">  3 - Create an empty project</span>
+</span><span class='line'>
+</span><span class='line'><span class="gp">&gt;</span> 1
+</span><span class='line'>
+</span><span class='line'><span class="go">OK, application my_first_application is created.</span>
+</span><span class='line'>
+</span><span class='line'><span class="go">Have fun!</span>
+</span><span class='line'><span class="gp">$</span> <span class="nb">cd </span>my_first_application
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>From what I&#8217;ve seen the next thing to do is to run the application and point a browser at it, but we&#8217;re going to take a slightly longer path and start the console:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='console'><span class='line'><span class="gp">$</span> play
+</span><span class='line'><span class="go">[info] Loading project definition from /Users/matt/messing_with_play/my_first_application/project</span>
+</span><span class='line'><span class="go">[info] Set current project to my_first_application (in build file:/Users/matt/messing_with_play/my_first_application/)</span>
+</span><span class='line'><span class="go">       _            _</span>
+</span><span class='line'><span class="go"> _ __ | | __ _ _  _| |</span>
+</span><span class='line'><span class="go">| &#39;_ \| |/ _&#39; | || |_|</span>
+</span><span class='line'><span class="go">|  __/|_|\____|\__ (_)</span>
+</span><span class='line'><span class="go">|_|            |__/</span>
+</span><span class='line'>
+</span><span class='line'><span class="go">play! 2.0, http://www.playframework.org</span>
+</span><span class='line'>
+</span><span class='line'><span class="gp">&gt;</span> Type <span class="s2">&quot;help play&quot;</span> or <span class="s2">&quot;license&quot;</span> <span class="k">for </span>more information.
+</span><span class='line'><span class="gp">&gt;</span> Type <span class="s2">&quot;exit&quot;</span> or use Ctrl+D to leave this console.
+</span><span class='line'>
+</span><span class='line'><span class="go">[my_first_application] $</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Anyway, this is the Play console.  From it you can do several things but we&#8217;re going to begin by starting the server, testing it with our browser, and then stopping the running
+application:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='console'><span class='line'><span class="go">[my_first_application] $ run</span>
+</span><span class='line'>
+</span><span class='line'><span class="go">[info] Updating {file:/Users/matt/messing_with_play/my_first_application/}my_first_application...</span>
+</span><span class='line'><span class="go">[info] Done updating.</span>
+</span><span class='line'><span class="go">--- (Running the application from SBT, auto-reloading is enabled) ---</span>
+</span><span class='line'>
+</span><span class='line'><span class="go">[info] play - Listening for HTTP on port 9000...</span>
+</span><span class='line'>
+</span><span class='line'><span class="go">(Server started, use Ctrl+D to stop and go back to the console...)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The first time you run your application it may take a while whilst the framework checks your dependencies.  After it&#8217;s started the server you should be able to point your
+browser at <a href="http://localhost:9000/">http://localhost:9000/</a> and should see a nice looking set of pages.  Feel free to wander around!  You may notice that the first request
+causes the following output in the console:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='console'><span class='line'><span class="go">[info] Compiling 5 Scala sources and 1 Java source to /Users/matt/messing_with_play/my_first_application/target/scala-2.9.1/classes...</span>
+</span><span class='line'><span class="go">[info] play - Application started (Dev)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You should note that every time you change a source file the framework will recompile it and load the resulting code.  This is great, giving the quick feedback that is so
+productive with Rails, but I&#8217;ve found it somewhat easier to do a compile myself when working on code.  That is not to say that automatic recompilation isn&#8217;t handy, it&#8217;s just
+that I&#8217;ve been learning Scala at the same time, so I tend to make more source code errors than I do application logic errors, if that makes any sense.</p>
+
+<p>To compile the code we need to stop the server, so press <code>CTRL</code> and <code>D</code>.  Then do the following:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='console'><span class='line'><span class="go">[my_first_application] $ compile</span>
+</span><span class='line'><span class="go">[success] Total time: 0 s, completed Mar 18, 2012 4:57:37 PM</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>This tells me there are no compilation errors, so I could <code>run</code> the application and try the browser again.  I&#8217;d certainly do this if I had changed code, and it had compiled
+successfully, just to make sure I hadn&#8217;t broken the application itself.</p>
+
+<p>There&#8217;s something important to note here:</p>
+
+<p>You&#8217;ve probably noticed that you can access the framework documentation from your new application by going to <a href="http://localhost:9000/@documentation">http://localhost:9000/@documentation</a>
+(remember to <code>run</code> your application first!).  <strong><em>Thing is, if your code won&#8217;t compile you can&#8217;t <code>run</code> your application, so you can&#8217;t access the documentation, which means you
+might not be able to work out what to do to fix the problem!</em></strong></p>
+
+<p>So, my advice: keep <a href="http://www.playframework.org/documentation/api/2.0/scala/index.html#package">the online API documentation</a> handy!</p>
+
+<p>Think I&#8217;ll leave it there.  You can find out more about the Play console by typing <code>help</code>, although I&#8217;ve not used anything else for the moment.  Next time I&#8217;ll go into the
+structure of the application and hooking up a database.</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Things I've learned this week]]></title>
