@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Things Learned | Words, code, skates]]></title>
   <link href="http://mattdenner.github.com//blog/categories/things-learned/atom.xml" rel="self"/>
   <link href="http://mattdenner.github.com//"/>
-  <updated>2012-03-18T11:22:26+00:00</updated>
+  <updated>2012-03-18T12:00:40+00:00</updated>
   <id>http://mattdenner.github.com//</id>
   <author>
     <name><![CDATA[Matthew Denner]]></name>
@@ -12,6 +12,22 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Things I've learned this week]]></title>
+    <link href="http://mattdenner.github.com//blog/2012/03/18/things-ive-learned-this-week/"/>
+    <updated>2012-03-18T11:26:00+00:00</updated>
+    <id>http://mattdenner.github.com//blog/2012/03/18/things-ive-learned-this-week</id>
+    <content type="html"><![CDATA[<p>What I've learned this week:</p>
+
+<ul>
+<li>I have no free time because I work too much</li>
+<li><a href="http://tmux.sourceforge.net/">tmux</a> and <a href="http://vim.org/">vim</a> are a powerful combination</li>
+<li><a href="http://scala-lang.org/">Scala</a> is hard to write after working in Ruby for so long</li>
+</ul>
+
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Things I've Learned This Week]]></title>
