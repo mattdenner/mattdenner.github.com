@@ -1,3 +1,22 @@
+/* Bordering and stuff */
+body {
+  background-color: #222222;
+}
+main, .content-area {
+  background-color: #f8f8f8;
+}
+.borderradius main {
+  border-radius: 10px;
+}
+.borderradius header .content-area {
+  border-radius: 0 0 10px 10px;
+  margin-bottom: 1em;
+}
+.borderradius footer .content-area {
+  border-radius: 10px 10px 0 0;
+  padding-top: 5px;
+}
+
 a {
   text-decoration: none;
   color: #000000;
@@ -18,12 +37,13 @@ body > header h1 {
 }
 
 body > header a, p, div, h1, h2, h3, h4 {
-  color: #000000;
+  color: #222222;
   color: rgba(0,0,0,0.8);
 }
 
 body > header p {
   margin-top: 0;
+  margin-bottom: 0;
   color: #eeeeee;
   color: rgba(0,0,0,0.6);
 }
