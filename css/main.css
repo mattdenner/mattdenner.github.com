@@ -1,22 +1,3 @@
-/* Bordering and stuff */
-body {
-  background-color: #222222;
-}
-main, .content-area {
-  background-color: #f8f8f8;
-}
-.borderradius main {
-  border-radius: 10px;
-}
-.borderradius header .content-area {
-  border-radius: 0 0 10px 10px;
-  margin-bottom: 1em;
-}
-.borderradius footer .content-area {
-  border-radius: 10px 10px 0 0;
-  padding-top: 5px;
-}
-
 a {
   text-decoration: none;
   color: #000000;
