@@ -56,6 +56,9 @@
         </menu>
       </aside>
 
+      <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.js"></script>
+      <script>window.jQuery || document.write('<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.js"><\/script>')</script>
+
       <article id="content" class="ui">
         <header>
   <h2 class="tk-heading">Learning the countries of the world</h2>
@@ -68,114 +71,47 @@ currently know without cheating (if I misplaced a country it isn&#39;t in this l
   <!-- Build a list of the countries that have been learned so far -->
   <style type="text/css">
     #progress { clear: both; }
-
-
-    #progress #britain,
-
-    #progress #ireland,
-
-    #progress #ulster,
-
-    #progress #france,
-
-    #progress #spain,
-
-    #progress #portugal,
-
-    #progress #germany,
-
-    #progress #denmark,
-
-    #progress #netherlands,
-
-    #progress #belgium,
-
-    #progress #italy,
-
-    #progress #sardinia,
-
-    #progress #sicily,
-
-    #progress #switzerland,
-
-    #progress #norway,
-
-    #progress #sweden,
-
-    #progress #finland,
-
-    #progress #turkey,
-
-    #progress #iraq,
-
-    #progress #iran,
-
-    #progress #qatar,
-
-    #progress #saudi,
-
-    #progress #syria,
-
-    #progress #russia,
-
-    #progress #iceland,
-
-    #progress #greenland,
-
-    #progress #canada,
-
-    #progress #usa,
-
-    #progress #alaska,
-
-    #progress #hawaii,
-
-    #progress #mexico,
-
-    #progress #brazil,
-
-    #progress #argentina,
-
-    #progress #peru,
-
-    #progress #australia,
-
-    #progress #new_zealand,
-
-    #progress #tasmania,
-
-    #progress #china,
-
-    #progress #india,
-
-    #progress #mongolia,
-
-    #progress #sri_lanka,
-
-    #progress #pakistan,
-
-    #progress #morocco,
-
-    #progress #south_africa,
-
-    #progress #libya,
-
-    #progress #egypt,
-
-    #progress #sudan,
-
-    #progress #ethiopia,
-
-    #progress #madagascar,
-
-    #progress #antarctica,
-
-    marker {
-      fill: red;
+    #progress .learnt { fill: red; }
+    #progress .highlight {fill: green;}
+    
+    #country_list, #country_list li {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    #country_list li {
+      float: left;
+      width: 150px;
+      font-size: 15px;
     }
   </style>
+  <script type="text/javascript">
+    $(function setupHighlightingCountries() {
+      var svg = $("svg");
+      $("#country_list li").each(function(index, element) {
+        var country = $(element).attr("data-country");
+        addClass(svg.find("#"+country), "learnt");
+      }).hover(
+        hoverHandler(addClass),
+        hoverHandler(removeClass)
+      );
+
+      function hoverHandler(f) {
+        return function() {
+          var country = $(this).attr("data-country");
+          f(svg.find("#"+country), "highlight");
+        };
+      }
+      function addClass(element, c) {
+        element.attr("class", element.attr("class") + " " + c);
+      }
+      function removeClass(element, c) {
+        element.attr("class", element.attr("class").replace(c, ""));
+      }
+    });
+  </script>
   <header>
-    <h2>Countries learned so far: 50</h2>
+    <h2>Countries learned so far: 0</h2>
   </header>
 
   <div class="captioned-image">
@@ -538,6 +474,111 @@ currently know without cheating (if I misplaced a country it isn&#39;t in this l
       and slightly modified to group some of the smaller islands and outcrops.
     </p>
   </div>
+  
+  <ul id="country_list">
+
+
+    <li data-country="alaska">alaska</li>
+
+    <li data-country="antarctica">antarctica</li>
+
+    <li data-country="argentina">argentina</li>
+
+    <li data-country="australia">australia</li>
+
+    <li data-country="belgium">belgium</li>
+
+    <li data-country="brazil">brazil</li>
+
+    <li data-country="britain">britain</li>
+
+    <li data-country="canada">canada</li>
+
+    <li data-country="china">china</li>
+
+    <li data-country="denmark">denmark</li>
+
+    <li data-country="egypt">egypt</li>
+
+    <li data-country="ethiopia">ethiopia</li>
+
+    <li data-country="finland">finland</li>
+
+    <li data-country="france">france</li>
+
+    <li data-country="germany">germany</li>
+
+    <li data-country="greenland">greenland</li>
+
+    <li data-country="hawaii">hawaii</li>
+
+    <li data-country="iceland">iceland</li>
+
+    <li data-country="india">india</li>
+
+    <li data-country="iran">iran</li>
+
+    <li data-country="iraq">iraq</li>
+
+    <li data-country="ireland">ireland</li>
+
+    <li data-country="italy">italy</li>
+
+    <li data-country="libya">libya</li>
+
+    <li data-country="madagascar">madagascar</li>
+
+    <li data-country="mexico">mexico</li>
+
+    <li data-country="mongolia">mongolia</li>
+
+    <li data-country="morocco">morocco</li>
+
+    <li data-country="netherlands">netherlands</li>
+
+    <li data-country="new_zealand">new zealand</li>
+
+    <li data-country="norway">norway</li>
+
+    <li data-country="pakistan">pakistan</li>
+
+    <li data-country="peru">peru</li>
+
+    <li data-country="portugal">portugal</li>
+
+    <li data-country="qatar">qatar</li>
+
+    <li data-country="russia">russia</li>
+
+    <li data-country="sardinia">sardinia</li>
+
+    <li data-country="saudi">saudi</li>
+
+    <li data-country="sicily">sicily</li>
+
+    <li data-country="south_africa">south africa</li>
+
+    <li data-country="spain">spain</li>
+
+    <li data-country="sri_lanka">sri lanka</li>
+
+    <li data-country="sudan">sudan</li>
+
+    <li data-country="sweden">sweden</li>
+
+    <li data-country="switzerland">switzerland</li>
+
+    <li data-country="syria">syria</li>
+
+    <li data-country="tasmania">tasmania</li>
+
+    <li data-country="turkey">turkey</li>
+
+    <li data-country="ulster">ulster</li>
+
+    <li data-country="usa">usa</li>
+
+  </ul>
 </section>
 
 
@@ -557,8 +598,6 @@ currently know without cheating (if I misplaced a country it isn&#39;t in this l
     </footer>
 
     <!-- Semantic UI -->
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.js"></script>
-    <script>window.jQuery || document.write('<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.js"><\/script>')</script>
     <script src="/javascript/semantic.min.js"></script>
 
     <!-- Google Analytics (later)
