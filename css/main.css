@@ -1,3 +1,55 @@
+/*
+ * Typography
+ * Lifted from: http://www.html5rocks.com/en/tutorials/webfonts/quick/
+ */
+@font-face {
+  font-family: aleo;
+  src: url("/fonts/aleo/Aleo Regular/aleo-regular-webfont.otf") format("opentype");
+  src: url('/fonts/aleo/Aleo Regular/aleo-regular-webfont.eot'); /* IE 5-8 */ 
+  src: local('☺'),             /* sneakily trick IE */
+        url('/fonts/aleo/Aleo Regular/aleo-regular-webfont.woff') format('woff'),    /* FF 3.6, Chrome 5, IE9 */
+        url('/fonts/aleo/Aleo Regular/aleo-regular-webfont.ttf') format('truetype'), /* Opera, Safari */
+        url('/fonts/aleo/Aleo Regular/aleo-regular-webfont.svg#font') format('svg'); /* iOS */
+}
+@font-face {
+  font-family: aleo;
+  font-weight: bold;
+  src: url("/fonts/aleo/Aleo Bold/aleo-bold-webfont.otf") format("opentype");
+  src: url('/fonts/aleo/Aleo Bold/aleo-bold-webfont.eot'); /* IE 5-8 */ 
+  src: local('☺'),             /* sneakily trick IE */
+        url('/fonts/aleo/Aleo Bold/aleo-bold-webfont.woff') format('woff'),    /* FF 3.6, Chrome 5, IE9 */
+        url('/fonts/aleo/Aleo Bold/aleo-bold-webfont.ttf') format('truetype'), /* Opera, Safari */
+        url('/fonts/aleo/Aleo Bold/aleo-bold-webfont.svg#font') format('svg'); /* iOS */
+}
+@font-face {
+  font-family: aleo;
+  font-weight: bold;
+  font-style: italic;
+  src: url("/fonts/aleo/Aleo Bold Italic/aleo-bolditalic-webfont.otf") format("opentype");
+  src: url('/fonts/aleo/Aleo Bold Italic/aleo-bolditalic-webfont.eot'); /* IE 5-8 */ 
+  src: local('☺'),             /* sneakily trick IE */
+        url('/fonts/aleo/Aleo Bold Italic/aleo-bolditalic-webfont.woff') format('woff'),    /* FF 3.6, Chrome 5, IE9 */
+        url('/fonts/aleo/Aleo Bold Italic/aleo-bolditalic-webfont.ttf') format('truetype'), /* Opera, Safari */
+        url('/fonts/aleo/Aleo Bold Italic/aleo-bolditalic-webfont.svg#font') format('svg'); /* iOS */
+}
+@font-face {
+  font-family: aleo;
+  font-style: italic;
+  src: url("/fonts/aleo/Aleo Italic/aleo-italic-webfont.otf") format("opentype");
+  src: url('/fonts/aleo/Aleo Italic/aleo-italic-webfont.eot'); /* IE 5-8 */ 
+  src: local('☺'),             /* sneakily trick IE */
+        url('/fonts/aleo/Aleo Italic/aleo-italic-webfont.woff') format('woff'),    /* FF 3.6, Chrome 5, IE9 */
+        url('/fonts/aleo/Aleo Italic/aleo-italic-webfont.ttf') format('truetype'), /* Opera, Safari */
+        url('/fonts/aleo/Aleo Italic/aleo-italic-webfont.svg#font') format('svg'); /* iOS */
+}
+.tk-body, .tk-header {
+  font-family: aleo, helvetica, verdana, sans-serif;
+  line-height: 1.5em;
+}
+.tk-header {
+  font-weight: bold;
+}
+
 a {
   text-decoration: none;
   color: #000000;
@@ -37,6 +89,10 @@ body > footer {
   border-top: 2px solid rgba(0,0,0,0.6);
   padding-top: 10px;
   font-size: 1.0rem;
+}
+body > footer p {
+  margin: 0;
+  line-height: 1.2em;
 }
 
 footer {
