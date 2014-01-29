@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+    <title>Rick Rolling Markov Chains</title>
+
+    <link rel="stylesheet" type="text/css" href="/css/normalize.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/semantic.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/syntax.css">
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
+
+    <!-- Modernizr -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.7.1/modernizr.min.js"></script>
+  </head>
+  <body id="home" class="tk-body">
+    <header class="ui">
+      <div class="content-area">
+        <h1 class="tk-heading"><a href="/">Matthew Denner</a></h1>
+        <p>Something something witty comment something</p>
+      </div>
+    </header>
+
+    <main class="content-area">
+      <aside id="social" class="ui">
+        <menu class="ui list tk-heading">
+          <menuitem class="item">
+            <a href="http://twitter.com/mattdenner">
+              <i class="meta icon large twitter"></i>
+              <span class="content">@mattdenner</span>
+            </a>
+          </menuitem>
+          <menuitem class="item">
+            <a href="http://github.com/mattdenner">
+              <i class="meta icon large github"></i>
+              <span class="content">mattdenner</span>
+            </a>
+          </menuitem>
+          <menuitem class="item">
+            <a href="http://bitbucket.org/mattdenner">
+              <i class="meta icon large bitbucket"></i>
+              <span class="content">mattdenner</span>
+            </a>
+          </menuitem>
+          <menuitem class="item">
+            <a href="http://www.linkedin.com/pub/matthew-denner/2/617/b21">
+              <i class="meta icon large linkedin"></i>
+              <span class="content">Matthew Denner</span>
+            </a>
+          </menuitem>
+        </menu>
+      </aside>
+
+      <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.js"></script>
+      <script>window.jQuery || document.write('<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.js"><\/script>')</script>
+
+      <article id="content" class="ui">
+        <header>
+  <h2 class="tk-heading">Rick Rolling Markov Chains</h2>
+</header>
+<p>I had this whacky idea: could I build a Clojure program that could generate arbitrary
+<a href="http://en.wikipedia.org/wiki/Rickrolling">Rick Rolling</a> text?  Turns out it wasn&#39;t as hard as I expected!  Ok, so the
+text it generates isn&#39;t brilliant, but the code is incredibly simple.</p>
+
+<h3>The idea</h3>
+
+<p>First, understand that a simple way to generate <em>sensible</em> yet <em>random</em> text is to use a
+<a href="http://en.wikipedia.org/wiki/Markov_chain">Markov Chain</a>: a graph where each node is a word and each directed edge
+between two nodes determines the probability of the words flowing in that order.  To generate text simply pick a node
+and start randomly walking, based on the probability from the edges, until you have all the text you want.  It doesn&#39;t
+generate great text, and is the plague of Twitter, but it does get you something that <em>may</em> make sense!</p>
+
+<p>Second, if we&#39;re going to generate Rick Rolling text we know that our path through the Markov Chain will have to pass
+through particular words at particular points.  If we pretend that our text is broken into lines of a particular length,
+let&#39;s say <code>L</code>, then we know that every <code>L</code> words we will have to pass through one of the words in the lyrics of
+<em>Never Gonna Give You Up</em>.</p>
+
+<h3>The Markov Chain</h3>
+
+<p>So let&#39;s start simple by writing the code that will generate our Markov Chain:</p>
+<div class="highlight"><pre><code class="clojure language-clojure" data-lang="clojure"><span class="p">(</span><span class="kd">defn </span><span class="nv">build-markov-chain</span>
+  <span class="p">[</span><span class="nv">words</span><span class="p">]</span>
+  <span class="p">(</span><span class="nb">-&gt; </span><span class="nv">words</span>
+      <span class="nv">words-&gt;edges</span>
+      <span class="nv">edges-&gt;counted-edges</span>
+      <span class="nv">counted-edges-&gt;markov-map</span><span class="p">))</span>
+</code></pre></div>
+<p>Here the code takes in a sequence of words, <code>words</code>, and then passes them through several functions:</p>
+<div class="highlight"><pre><code class="clojure language-clojure" data-lang="clojure"><span class="p">(</span><span class="kd">defn- </span><span class="nv">words-&gt;edges</span>
+  <span class="p">[</span><span class="nv">words</span><span class="p">]</span>
+  <span class="p">(</span><span class="nb">map vector </span><span class="nv">words</span> <span class="p">(</span><span class="nb">rest </span><span class="nv">words</span><span class="p">)))</span>
+</code></pre></div>
+<p>The <code>words-&gt;edges</code> function takes a sequence of words and returns a sequence of edges: each edge is a pair from one word
+to the word that follows it in the text.</p>
+<div class="highlight"><pre><code class="clojure language-clojure" data-lang="clojure"><span class="p">(</span><span class="kd">defn- </span><span class="nv">edges-&gt;counted-edges</span>
+  <span class="p">[</span><span class="nv">edges</span><span class="p">]</span>
+  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">accumulate</span> <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">memo</span> <span class="nv">edge</span><span class="p">]</span> <span class="p">(</span><span class="nb">merge-with + </span><span class="nv">memo</span> <span class="p">{</span><span class="nv">edge</span> <span class="mi">1</span><span class="p">}))]</span>
+    <span class="p">(</span><span class="nb">map </span><span class="nv">flatten</span> <span class="p">(</span><span class="nb">reduce </span><span class="nv">accumulate</span> <span class="p">{}</span> <span class="nv">edges</span><span class="p">))))</span>
+</code></pre></div>
+<p>The <code>edge-&gt;counted-edge</code> simply counts the number of occurrences of each edge, returning a sequence of triples.
+Effectively this is generating the properly weighted edges of our Markov Chain.</p>
+<div class="highlight"><pre><code class="clojure language-clojure" data-lang="clojure"><span class="p">(</span><span class="kd">defn- </span><span class="nv">counted-edges-&gt;markov-map</span>
+  <span class="p">[</span><span class="nv">counted-edges</span><span class="p">]</span>
+  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">merge-edge</span> <span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">memo</span> <span class="p">[</span><span class="nv">word</span> <span class="nv">following</span> <span class="nv">occurrences</span><span class="p">]]</span> <span class="p">(</span><span class="nb">merge-with merge </span><span class="nv">memo</span> <span class="p">{</span><span class="nv">word</span> <span class="p">{</span><span class="nv">following</span> <span class="nv">occurrences</span><span class="p">}}))]</span>
+    <span class="p">(</span><span class="nb">reduce </span><span class="nv">merge-edge</span> <span class="p">{}</span> <span class="nv">counted-edges</span><span class="p">)))</span>
+</code></pre></div>
+<p>The final function, <code>counted-edge-&gt;markov-map</code>, takes our weighted edges and builds the final Markov Chain.  Here the
+returned map goes from a word to another map which is the occurrences of each possible following word.</p>
+
+<p>It&#39;s easier to see it in practice (formatted for better readability):</p>
+<div class="highlight"><pre><code class="clojure language-clojure" data-lang="clojure"><span class="nv">user=&gt;</span> <span class="p">(</span><span class="nf">build-markov-chain</span> <span class="p">(</span><span class="nf">split</span> <span class="s">&quot;this is some simple text is it&quot;</span> <span class="o">#</span><span class="s">&quot; &quot;</span><span class="p">))</span>
+<span class="p">{</span><span class="s">&quot;this&quot;</span>   <span class="p">{</span><span class="s">&quot;is&quot;</span> <span class="mi">1</span><span class="p">}</span>,
+ <span class="s">&quot;some&quot;</span>   <span class="p">{</span><span class="s">&quot;simple&quot;</span> <span class="mi">1</span><span class="p">}</span>,
+ <span class="s">&quot;simple&quot;</span> <span class="p">{</span><span class="s">&quot;text&quot;</span> <span class="mi">1</span><span class="p">}</span>,
+ <span class="s">&quot;text&quot;</span>   <span class="p">{</span><span class="s">&quot;is&quot;</span> <span class="mi">1</span><span class="p">}</span>,
+ <span class="s">&quot;is&quot;</span>     <span class="p">{</span><span class="s">&quot;some&quot;</span> <span class="mi">1</span>, <span class="s">&quot;it&quot;</span> <span class="mi">1</span><span class="p">}}</span>
+</code></pre></div>
+<p>If you read the text you can see that <strong>is</strong> appears twice and is followed by <strong>some</strong> and <strong>it</strong>.</p>
+
+<p>This isn&#39;t quite a Markov Chain as it has counts on the edges, rather than probabilities, but the code that comes will
+determine the probabilities at each visit to a node in the graph.  The reason for this will be apparent later.</p>
+
+<h3>Rick-Rolling</h3>
+
+<p>Right, so we know we need to have the lyrics of <em>Never Gonna Give You Up</em> in order in our text, and we also know that
+<strong>gonna</strong> is going to be a PITA to actually find in any other text, so we&#39;ll have a synonym of <strong>going to</strong>:</p>
+<div class="highlight"><pre><code class="clojure language-clojure" data-lang="clojure"><span class="p">(</span><span class="k">def </span><span class="o">^</span><span class="p">{</span><span class="ss">:private</span> <span class="nv">true</span><span class="p">}</span>
+  <span class="nv">rick-roll-lyrics</span>
+  <span class="s">&quot;never gonna give you up</span>
+<span class="s">   never gonna let you down</span>
+<span class="s">   never gonna run around and desert you</span>
+<span class="s">   never gonna make you cry</span>
+<span class="s">   never gonna say goodbye</span>
+<span class="s">   never gonna tell a lie and hurt you&quot;</span><span class="p">)</span>
+
+<span class="p">(</span><span class="k">def </span><span class="o">^</span><span class="p">{</span><span class="ss">:private</span> <span class="nv">true</span><span class="p">}</span>
+  <span class="nv">synonyms</span>
+  <span class="p">{</span><span class="s">&quot;gonna&quot;</span> <span class="p">(</span><span class="nf">split</span> <span class="s">&quot;going to&quot;</span> <span class="o">#</span><span class="s">&quot;\s+&quot;</span><span class="p">)})</span>
+
+<span class="p">(</span><span class="kd">defn- </span><span class="nv">replace-synonyms</span>
+  <span class="p">[</span><span class="nv">words</span><span class="p">]</span>
+  <span class="p">(</span><span class="nf">flatten</span> <span class="p">(</span><span class="nb">map </span><span class="o">#</span><span class="p">(</span><span class="nb">get </span><span class="nv">synonyms</span> <span class="nv">%1</span> <span class="nv">%1</span><span class="p">)</span> <span class="nv">words</span><span class="p">)))</span>
+
+<span class="p">(</span><span class="k">def </span><span class="o">^</span><span class="p">{</span><span class="ss">:private</span> <span class="nv">true</span><span class="p">}</span>
+  <span class="nv">rick-roll-sequence</span>
+  <span class="p">(</span><span class="nf">flatten</span> <span class="p">(</span><span class="nf">replace-synonyms</span> <span class="p">(</span><span class="nf">split</span> <span class="nv">rick-roll-lyrics</span> <span class="o">#</span><span class="s">&quot;\s+&quot;</span><span class="p">))))</span>
+</code></pre></div>
+<p>We also know that any Markov Chain must contain all of the lyrics otherwise there is no point in even trying to generate
+the text:</p>
+<div class="highlight"><pre><code class="clojure language-clojure" data-lang="clojure"><span class="p">(</span><span class="kd">defn- </span><span class="nv">contains-all-lyrics?</span>
+  <span class="p">[</span><span class="nv">markov-map</span><span class="p">]</span>
+  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">words-in-markov-map</span> <span class="p">(</span><span class="nb">set </span><span class="p">(</span><span class="nb">keys </span><span class="nv">markov-map</span><span class="p">))</span>
+        <span class="nv">words-in-lyrics</span>     <span class="p">(</span><span class="nb">set </span><span class="nv">rick-roll-sequence</span><span class="p">)]</span>
+    <span class="p">(</span><span class="nf">subset?</span> <span class="nv">words-in-lyrics</span> <span class="nv">words-in-markov-map</span><span class="p">)))</span>
+</code></pre></div>
+<p>Now we have to generate a path through the Markov Chain that passes through particular words.  We can make a sequence
+that represents this path but with <em>blanks</em> that need filling in, and we already know that we&#39;ll have a number of these
+blanks on each line.</p>
+<div class="highlight"><pre><code class="clojure language-clojure" data-lang="clojure"><span class="p">(</span><span class="kd">defn- </span><span class="nv">generate-path</span>
+  <span class="p">[</span><span class="nv">length-between-lyrics</span><span class="p">]</span>
+  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">blanks</span> <span class="p">(</span><span class="nb">repeat </span><span class="nv">length-between-lyrics</span> <span class="ss">:pick-a-word</span><span class="p">)]</span>
+    <span class="p">(</span><span class="nf">flatten</span> <span class="p">(</span><span class="nb">interleave </span><span class="nv">rick-roll-sequence</span> <span class="p">(</span><span class="nb">repeat </span><span class="nv">blanks</span><span class="p">)))))</span>
+</code></pre></div>
+<p>Here the code marks the blanks with <code>:pick-a-word</code>.  To fill in these blanks we&#39;re going to have to pick a word based on
+the previous word, which means that we&#39;ll be using the occurrence map from the Markov Chain for that previous word.  But
+if we pick a word, and it later doesn&#39;t work out, we&#39;ll need to take out the word out of the occurrence map, at least
+for this point in the walk.  So two functions:</p>
+<div class="highlight"><pre><code class="clojure language-clojure" data-lang="clojure"><span class="p">(</span><span class="kd">defn- </span><span class="nv">pick-word</span>
+  <span class="p">[</span><span class="nv">occurrences</span><span class="p">]</span>
+  <span class="p">(</span><span class="nb">when-not </span><span class="p">(</span><span class="nf">empty?</span> <span class="nv">occurrences</span><span class="p">)</span>
+    <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">weighted-words</span> <span class="p">(</span><span class="nb">map </span><span class="p">(</span><span class="k">fn </span><span class="p">[[</span><span class="nv">k</span> <span class="nv">v</span><span class="p">]]</span> <span class="p">(</span><span class="nb">repeat </span><span class="nv">v</span> <span class="nv">k</span><span class="p">))</span> <span class="nv">occurrences</span><span class="p">)</span>
+          <span class="nv">pick-list</span>      <span class="p">(</span><span class="nf">flatten</span> <span class="nv">weighted-words</span><span class="p">)</span>
+          <span class="nv">index-to-pick</span>  <span class="p">(</span><span class="nb">rand-int </span><span class="p">(</span><span class="nb">count </span><span class="nv">pick-list</span><span class="p">))]</span>
+      <span class="p">(</span><span class="nb">nth </span><span class="nv">pick-list</span> <span class="nv">index-to-pick</span><span class="p">))))</span>
+
+<span class="p">(</span><span class="k">def </span><span class="o">^</span><span class="p">{</span><span class="ss">:private</span> <span class="nv">true</span><span class="p">}</span>
+  <span class="nv">remove-word</span>
+  <span class="nv">dissoc</span><span class="p">)</span>
+</code></pre></div>
+<p><code>pick-word</code> takes an occurrence map and generates a sequence where each word is repeated.  It then uses <code>rand-int</code> to
+pick an index in that sequence: effectively this combination gives us the probability of picking a word.</p>
+
+<p>The penultimate piece of the puzzle is taking some text and Rick Rolling from it:</p>
+<div class="highlight"><pre><code class="clojure language-clojure" data-lang="clojure"><span class="p">(</span><span class="kd">defn </span><span class="nv">rick-roll</span>
+  <span class="p">[</span><span class="nv">words</span> <span class="nv">length</span><span class="p">]</span>
+  <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">markov-chain</span>                <span class="p">(</span><span class="nf">markov/build-markov-chain</span> <span class="nv">words</span><span class="p">)</span>
+        <span class="p">[</span><span class="nv">first-word</span> <span class="o">&amp;</span> <span class="nv">path-to-walk</span><span class="p">]</span> <span class="p">(</span><span class="nf">generate-path</span> <span class="nv">length</span><span class="p">)</span>
+        <span class="nv">where-to-begin</span>              <span class="p">(</span><span class="nb">seq </span><span class="p">[</span><span class="nv">first-word</span><span class="p">])]</span>
+    <span class="p">(</span><span class="nb">when-let </span><span class="p">[</span><span class="nv">rick-roll-text</span> <span class="p">(</span><span class="nf">walk-the-path</span> <span class="nv">markov-chain</span> <span class="nv">path-to-walk</span> <span class="nv">where-to-begin</span><span class="p">)]</span>
+      <span class="p">(</span><span class="nb">reverse </span><span class="nv">rick-roll-text</span><span class="p">))))</span>
+</code></pre></div>
+<p>This should be fairly obvious: we build a Markov Chain, generate a path to walk, and start at the first word of that
+path.  The only bit to fill in is <code>walk-the-path</code>, which will walk through the Markov Chain to build the Rick Rolling
+text:</p>
+<div class="highlight"><pre><code class="clojure language-clojure" data-lang="clojure"><span class="p">(</span><span class="kd">defn- </span><span class="nv">try-various-steps-in-path</span>
+  <span class="p">[</span><span class="nv">markov-map</span> <span class="nv">occurrences-from-previous-word</span> <span class="nv">path-to-walk</span> <span class="nv">rick-roll-text-so-far</span><span class="p">]</span>
+  <span class="p">(</span><span class="k">loop </span><span class="p">[</span><span class="nv">occurrences</span> <span class="nv">occurrences-from-previous-word</span><span class="p">]</span>
+    <span class="p">(</span><span class="nb">when-let </span><span class="p">[</span><span class="nv">suggested-word</span> <span class="p">(</span><span class="nf">pick-word</span> <span class="nv">occurrences</span><span class="p">)]</span>
+      <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">rick-roll-text</span> <span class="p">(</span><span class="nf">walk-the-path</span> <span class="nv">markov-map</span> <span class="nv">path-to-walk</span> <span class="p">(</span><span class="nb">cons </span><span class="nv">suggested-word</span> <span class="nv">rick-roll-text-so-far</span><span class="p">))]</span>
+        <span class="p">(</span><span class="nb">if-not </span><span class="p">(</span><span class="nb">nil? </span><span class="nv">rick-roll-text</span><span class="p">)</span>
+          <span class="nv">rick-roll-text</span>
+          <span class="p">(</span><span class="nf">recur</span> <span class="p">(</span><span class="nf">remove-word</span> <span class="nv">occurrences</span> <span class="nv">suggested-word</span><span class="p">)))))))</span>
+
+<span class="p">(</span><span class="kd">defn- </span><span class="nv">walk-the-path</span>
+  <span class="p">[</span><span class="nv">markov-map</span> <span class="p">[</span><span class="nv">current-word</span> <span class="o">&amp;</span> <span class="nv">path-to-walk</span><span class="p">]</span> <span class="p">[</span><span class="nv">previous-word</span> <span class="o">&amp;</span> <span class="nv">rest-of-rick-roll</span> <span class="ss">:as</span> <span class="nv">rick-roll-text-so-far</span><span class="p">]]</span>
+  <span class="p">(</span><span class="nb">when </span><span class="p">(</span><span class="nf">contains-all-lyrics?</span> <span class="nv">markov-map</span><span class="p">)</span>
+    <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">nil? </span><span class="nv">current-word</span><span class="p">)</span>
+      <span class="p">(</span><span class="nb">cons </span><span class="nv">previous-word</span> <span class="nv">rest-of-rick-roll</span><span class="p">)</span>
+      <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">occurrences-from-previous-word</span> <span class="p">(</span><span class="nb">get </span><span class="nv">markov-map</span> <span class="nv">previous-word</span><span class="p">)]</span>
+        <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nb">= </span><span class="ss">:pick-a-word</span> <span class="nv">current-word</span><span class="p">)</span>
+          <span class="p">(</span><span class="nf">try-various-steps-in-path</span> <span class="nv">markov-map</span> <span class="nv">occurrences-from-previous-word</span> <span class="nv">path-to-walk</span> <span class="nv">rick-roll-text-so-far</span><span class="p">)</span>
+          <span class="p">(</span><span class="nb">when-let </span><span class="p">[</span><span class="nv">occurrence-of-current-word</span> <span class="p">(</span><span class="nb">get </span><span class="nv">occurrences-from-previous-word</span> <span class="nv">current-word</span><span class="p">)]</span>
+            <span class="p">(</span><span class="nf">walk-the-path</span> <span class="nv">markov-map</span> <span class="nv">path-to-walk</span> <span class="p">(</span><span class="nb">cons </span><span class="nv">current-word</span> <span class="nv">rick-roll-text-so-far</span><span class="p">))))))))</span>
+</code></pre></div>
+<p>Notice that <code>try-various-steps-in-path</code> loops until it either <code>walk-the-path</code> finds a final sequence of words, or it
+runs out of words to follow the current one.  So this code will always terminate, it just may never find a valid path
+through the Markov Chain.</p>
+
+<h3>Generating text</h3>
+
+<p>Turns out that writing this code isn&#39;t too hard: it took me a couple of hours and could be better.  The difficulty comes
+in finding sources of text that can form a Markov Chain that will work for Rick Rolling.  Even with the <strong>gonna/going
+to</strong> synonym switch it&#39;s actually <strong>desert</strong> that is the hard word to find!  I tried
+<a href="http://www.gutenberg.org/browse/scores/top">Project Gutenberg&#39;s top 100</a> and ended up using a couple.</p>
+
+<p>Once you do though:</p>
+<div class="highlight"><pre><code class="clojure language-clojure" data-lang="clojure"><span class="p">(</span><span class="nf">require</span> <span class="o">&#39;</span><span class="p">[</span><span class="nv">rick-roll-my-markov-chain.core</span> <span class="ss">:as</span> <span class="nv">core</span><span class="p">]</span> <span class="ss">:reload</span><span class="p">)</span>
+<span class="p">(</span><span class="nf">require</span> <span class="o">&#39;</span><span class="p">[</span><span class="nv">rick-roll-my-markov-chain.markov</span> <span class="ss">:as</span> <span class="nv">markov</span><span class="p">]</span> <span class="ss">:reload</span><span class="p">)</span>
+<span class="p">(</span><span class="nf">require</span> <span class="o">&#39;</span><span class="p">[</span><span class="nv">clojure.java.io</span> <span class="ss">:as</span> <span class="nv">io</span><span class="p">])</span>
+<span class="p">(</span><span class="nf">require</span> <span class="o">&#39;</span><span class="p">[</span><span class="nv">clojure.string</span> <span class="ss">:as</span> <span class="nv">str</span><span class="p">])</span>
+
+<span class="p">(</span><span class="kd">defn </span><span class="nv">article-&gt;text</span> <span class="p">[</span><span class="nv">filename</span><span class="p">]</span>
+  <span class="p">(</span><span class="nb">remove </span><span class="o">#</span><span class="p">(</span><span class="nb">= </span><span class="nv">%</span> <span class="s">&quot;&quot;</span><span class="p">)</span>
+    <span class="p">(</span><span class="nb">map </span><span class="p">(</span><span class="k">fn </span><span class="p">[</span><span class="nv">w</span><span class="p">]</span> <span class="p">(</span><span class="nb">-&gt; </span><span class="nv">w</span> <span class="nv">str/lower-case</span> <span class="p">(</span><span class="nf">str/replace</span> <span class="o">#</span><span class="s">&quot;[^a-z&#39;!.]&quot;</span> <span class="s">&quot;&quot;</span><span class="p">)</span> <span class="nv">str/trim</span><span class="p">))</span>
+      <span class="p">(</span><span class="nf">str/split</span> <span class="p">(</span><span class="nf">str/join</span> <span class="s">&quot; &quot;</span> <span class="p">(</span><span class="nb">line-seq </span><span class="p">(</span><span class="nf">io/reader</span> <span class="nv">filename</span><span class="p">)))</span> <span class="o">#</span><span class="s">&quot;\s+&quot;</span><span class="p">))))</span>
+
+<span class="p">(</span><span class="kd">defn </span><span class="nv">sequence-&gt;paragraphs</span> <span class="p">[</span><span class="nv">rick-roll-text</span> <span class="nv">sentence-length</span><span class="p">]</span>
+  <span class="p">(</span><span class="k">loop </span><span class="p">[</span><span class="nv">text-sequence</span> <span class="nv">rick-roll-text</span>
+         <span class="nv">p</span>             <span class="p">[]]</span>
+    <span class="p">(</span><span class="k">if </span><span class="p">(</span><span class="nf">empty?</span> <span class="nv">text-sequence</span><span class="p">)</span>
+      <span class="nv">p</span>
+      <span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">head</span> <span class="p">(</span><span class="nb">take </span><span class="nv">sentence-length</span> <span class="nv">text-sequence</span><span class="p">)</span>
+            <span class="nv">tail</span> <span class="p">(</span><span class="nb">drop </span><span class="nv">sentence-length</span> <span class="nv">text-sequence</span><span class="p">)]</span>
+        <span class="p">(</span><span class="nf">recur</span> <span class="nv">tail</span> <span class="p">(</span><span class="nb">conj </span><span class="nv">p</span> <span class="nv">head</span><span class="p">))))))</span>
+
+<span class="p">(</span><span class="k">let </span><span class="p">[</span><span class="nv">sentence-length</span> <span class="mi">15</span>
+      <span class="nv">filenames</span>       <span class="p">[</span><span class="s">&quot;the-adventures-of-sherlock-holmes&quot;</span> <span class="s">&quot;frankenstein&quot;</span><span class="p">]</span>
+      <span class="nv">texts</span>           <span class="p">(</span><span class="nb">map </span><span class="p">(</span><span class="nb">comp </span><span class="nv">article-&gt;text</span> <span class="o">#</span><span class="p">(</span><span class="nb">str </span><span class="s">&quot;resources/&quot;</span> <span class="nv">%1</span> <span class="s">&quot;.txt&quot;</span><span class="p">))</span> <span class="nv">filenames</span><span class="p">)</span>
+      <span class="nv">rick-roll-text</span>  <span class="p">(</span><span class="nf">core/rick-roll</span> <span class="p">(</span><span class="nb">apply concat </span><span class="nv">texts</span><span class="p">)</span> <span class="p">(</span><span class="nb">dec </span><span class="nv">sentence-length</span><span class="p">))</span>
+      <span class="nv">paragraphs</span>      <span class="p">(</span><span class="nf">sequence-&gt;paragraphs</span> <span class="nv">rick-roll-text</span> <span class="nv">sentence-length</span><span class="p">)]</span>
+  <span class="p">(</span><span class="nb">doseq </span><span class="p">[</span><span class="nv">p</span> <span class="nv">paragraphs</span><span class="p">]</span>
+    <span class="p">(</span><span class="nb">println </span><span class="p">(</span><span class="nf">str/join</span> <span class="s">&quot; &quot;</span> <span class="nv">p</span><span class="p">))))</span>
+</code></pre></div>
+<p>And, if you give it a moment as this code isn&#39;t efficient:</p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">never did this man who they stood fixed for the cottage it out upon you
+going to hear me to you a restrained by them overlook the papers. if you
+to for thy lover and carpeted it was. then that we retired to a just
+give new preceptors i left oxford with mr. windibank wished to the sorrows of which
+you tonight. you made a light. it&#39;s a more illiterate than her whole of taking
+up my pulses paused i try to me neglect the town in regent street i
+never ventured to geneva but you see me. i sincerely sympathised in justice and about
+going out. i looked upon me to walk out of science. with my revolver in
+to reflect that he loved. this suspense. presently i have five and i would have
+let me are. and the wreck and prescribed medicines and then i should run for
+you i experienced them and coming in height of treachery and they gained on him
+down to claim his steps because we shall have devoted affection. my former ways and
+never for my mind was able to a heavy footfall in my assistant mr. mccarthy
+going and it be aware that said mr. ryder. pray continue your confession i asked.
+to light. it&#39;s town for the advertised description tallied in favour i was possible to
+run back and the light and rugged mountains of yours mr. turner&#39;s lodgekeeper his destruction
+around the sledge to her mother could it was alive. i felt helpless. i saw
+and that hurts my own good and bloomed in the hall this sort of the
+desert heaths and a marriage with the inquest. the greatest fear leaves a sudden and
+you know more flurried than with chains and i met him made many objections which
+never beheld a victim. she beheld a woman deposed that purpose unfulfilled. yet when you
+going the door and source of england and five in some surprising since i have
+to conceal some small lake and perilous situation marks of my person it clear and
+make the ambition of the wind quickly over for a broadbrimmed hat actually freezing in
+you at my eye was not return. they are the owner of the storm that
+cry &#39;cooee!&#39; then at the use and pay such joy so blind vacancy open and
+never to him for you will find their walks with the market. all to me
+going in possession of your left him but there came upon the trustees are well
+to communicate. should die but a trumpet of receipt of my travels for he must
+say that there is worthy of heaven whom the appearances of charity descends to him.
+goodbye and earth and made of flowers and when that i don&#39;t think that he
+never had penetrated into the door and knock you appear to state visit to me
+going in this is a heading upon young openshaw shall see your own. indeed so
+to do you reasoned with more general look for he does his hand. your case
+tell you must form a more tangible cause. and animate us. that he pressed upon
+a violent start full and i saw the danger would each new scene to a
+lie behind him. and were already dusk and wretchedness and glad of the gloomy idea
+and this ebook complying with them. which i very truly and the most only to
+hurt you wish to the horizon as pressing my father. my father of copet. another
+you can afford. i have been in the utmost limit itself while my word that
+</code></pre></div>
+<p>Obviously the larger the text used to create the Markov Chain, the more possible paths through it for Rick Rolling, but
+more garbage text will be produced.</p>
+
+<p>Not happy with some of <a href="https://github.com/mattdenner/rick-roll-my-markov-chain">the code</a>, but the result was pleasing.</p>
+
+
+      </article>
+    </main>
+
+    <footer class="ui">
+      <div class="content-area">
+        <p>
+          <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/4.0/88x31.png"/></a>
+          This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+        </p>
+        <p>
+          <a href="http://bit.ly/Zfbls5">Aleo</a> font by Alessio Laiso.
+        </p>
+      </div>
+    </footer>
+
+    <!-- Semantic UI -->
+    <script src="/javascript/semantic.min.js"></script>
+
+    <!-- Google Analytics (later)
+    <script>
+        var _gaq=[['_setAccount','UA-6056637-3'],['_trackPageview']];
+        (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+        g.src='//www.google-analytics.com/ga.js';
+        s.parentNode.insertBefore(g,s)}(document,'script'));
+    </script>
+    -->
+  </body>
+</html>
