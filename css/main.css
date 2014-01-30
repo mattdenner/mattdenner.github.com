@@ -61,7 +61,7 @@ a:hover {
 }
 
 body {
-  font-size: 22px;
+  font-size: 18px;
 }
 
 body > header {
@@ -146,7 +146,7 @@ footer {
 }
 
 .highlight pre {
-  font-size: 0.6em;
+  font-size: 0.8em;
   line-height: 1em;
   width: 130%;
 }
